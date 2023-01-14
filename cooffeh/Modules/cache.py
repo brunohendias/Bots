@@ -1,5 +1,6 @@
 from json import dumps, loads
-from os.path import exists
+from os import popen
+from linecache import getline
 
 class Cache:
     title = 'Cache'
@@ -11,20 +12,13 @@ class Cache:
     def __repr__(self):
         return self.title
 
-    def exist(self):
-        return exists(self.path)
+    def delOld(self):
+        return popen(f'rm -rf ./Contents/*.txt')
 
     def readline(self, index=0):
         load = self.obj()
-        with open(self.path, 'rt+') as f:
-            lines = f.readlines()
-            tot = len(lines)
-            if index < 0:
-                index = tot + index
-            elif index > tot:
-                index = 0
-            line = lines[index]
-            load.__dict__ = loads(line)
+        line = getline(self.path, index)
+        load.__dict__ = {} if not line else loads(line)
         return load
 
     def writeline(self, obj):

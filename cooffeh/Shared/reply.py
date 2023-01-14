@@ -3,7 +3,7 @@ from pyrogram.types import InlineKeyboardMarkup as KM
 
 def adult(i):
     return KM([
-        [ KB('1', '0_adult'),KB('<', f"{i-1}_adult"),KB('>', f"{i+1}_adult") ],
+        [ KB('1', '1_adult'),KB('<', f"{i-1}_adult"),KB('>', f"{i+1}_adult") ],
         [ KB('Download', f"{i}_downloadAdult") ]
     ])
 

@@ -1,40 +1,39 @@
 from Models.Video import Video
-from datetime import date
 from bs4 import BeautifulSoup as bs
 from requests import get
 
-class RedAdult:
-    basepath = 'https://www.redtube.com'
+basepath = 'https://www.redtube.com'
 
-    def __init__(self, cache):
-        self.cache = cache
+def getData(cache, ul):
+    for tag in ul.find_all('li'):
+        div = tag.find('div', 'video_title')
+        if div:
+            a = div.find('a')
+            duration = tag.find('span', 'duration')
+            video = Video()
+            video.site = 'RedTube'
+            if duration:
+                video.title = a.text.strip() + duration.text.replace(' ', '').replace('\n', ' ')
+            else:
+                video.title = a.text.strip()
+            video.href = basepath + a.attrs['href']
+            img = tag.find('img')
+            video.thumb = img.attrs['data-src']
+            video.link = img.attrs['data-mediabook']
+            cache.writeline(video)
 
-    def getData(self, soup, id_):
-        data = soup.find('ul', { 'id': id_ })
-        if not data or data == None:
-            return True
-        for video in data.find_all('li'):
-            divTitle = video.find('div', 'video_title')
-            if divTitle:
-                a = divTitle.find('a')
-                duration = video.find('span', 'duration')
-                v = Video()
-                v.site = 'RedTube'
-                if not duration or duration == None:
-                    v.title = a.text.strip()
-                else:
-                    v.title = a.text.strip() + duration.text.replace(' ', '').replace('\n', ' ')
-                v.href = self.basepath + a.attrs['href']
-                img = video.find('img')
-                v.thumb = img.attrs['data-src']
-                v.link = img.attrs['data-mediabook']
-                self.cache.writeline(v)
-
-    def run(self):
-        html = get(self.basepath).text
-        soup = bs(html, 'html.parser')
-        self.getData(soup, 'block_hottest_videos_by_country')
-        self.getData(soup, 'block_recommended_videos')
-        self.getData(soup, 'most_recent_videos')
-        self.getData(soup, 'recommended_videos_menu_block')
-        self.getData(soup, 'trending_videos_block')
+def run(cache):
+    html = get(basepath).text
+    if not html:
+        return ''
+    soup = bs(html, 'html.parser')
+    ul = soup.find('ul', { 'id': 'block_hottest_videos_by_country' })
+    getData(cache, ul)
+    ul = soup.find('ul', { 'id': 'block_recommended_videos' })
+    getData(cache, ul)
+    ul = soup.find('ul', { 'id': 'most_recent_videos' })
+    getData(cache, ul)
+    ul = soup.find('ul', { 'id': 'recommended_videos_menu_block' })
+    getData(cache, ul)
+    ul = soup.find('ul', { 'id': 'trending_videos_block' })
+    getData(cache, ul)
