@@ -1,5 +1,5 @@
 from json import dumps, loads
-from os import popen
+from os import popen, path
 from linecache import getline
 
 class Cache:
@@ -11,6 +11,9 @@ class Cache:
 
     def __repr__(self):
         return self.title
+
+    def exist(self):
+        return path.exists(self.path)
 
     def delOld(self):
         return popen(f'rm -rf ./Contents/*.txt')

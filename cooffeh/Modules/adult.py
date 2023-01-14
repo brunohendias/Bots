@@ -13,6 +13,8 @@ def getVideo(index=1):
     return cache.readline(index)
 
 def run():
+    if cache.exist():
+        return True
     cache.delOld()
     html = get(basepath).text
     soup = bs(html, 'html.parser')
