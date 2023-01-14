@@ -6,4 +6,4 @@ class Video:
     thumb = ''
 
     def __repr__(self):
-        return self.title
+        return self.site
