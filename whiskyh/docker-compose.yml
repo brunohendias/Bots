@@ -1,0 +1,7 @@
+version: "3"
+services:
+  whiskyhbot:
+    image: brunohdev/bot:1.0.0
+    build: .
+    volumes:
+      - .:/app

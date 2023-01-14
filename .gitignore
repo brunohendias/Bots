@@ -1,0 +1,12 @@
+whiskyh/Contents/*.txt
+cooffeh/Contents/*.txt
+whiskyh/Log/*.txt
+cooffeh/Log/*.txt
+*.mp4
+*.jpg
+*.html
+__pycache__/
+
+.DS_Store
+*.env
+*.session*

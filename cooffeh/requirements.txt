@@ -1,0 +1,10 @@
+jurigged
+Pyrogram
+python-dotenv
+pytube
+beautifulsoup4
+requests
+Pillow
+qrcode
+scrapingant-client
+pyshorteners

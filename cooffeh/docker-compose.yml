@@ -1,0 +1,7 @@
+version: "3"
+services:
+  cooffehbot:
+    image: brunohdev/bot:1.0.0
+    build: .
+    volumes:
+      - .:/app

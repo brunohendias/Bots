@@ -1,0 +1,62 @@
+name: Deployment
+
+concurrency:
+  group: production
+  cancel-in-progress: true
+
+on:
+  push:
+    branches:
+      - main
+jobs:
+  deployment:
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Creating artifact
+        env:
+          GITHUB_SHA: ${{ github.sha }}
+        run: |
+          touch .whiskyh.env
+          touch .cooffeh.env
+          echo "${{ secrets.ENV_FILE_WHISKYH }}" > .whiskyh.env
+          echo "${{ secrets.ENV_FILE_COOFFEH }}" > .cooffeh.env
+          touch "${GITHUB_SHA}".tar.gz
+          tar -czf "${GITHUB_SHA}".tar.gz --exclude="${GITHUB_SHA}".tar.gz .
+      - name: Storing artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: app-build
+          path: ${{ github.sha }}.tar.gz
+      - name: Downloading artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: app-build
+      - name: Uploading to server
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USER }}
+          key: ${{ secrets.KEY }}
+          port: 22
+          source: ${{ github.sha }}.tar.gz
+          target: /tmp/
+      - name: Extracting files
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USER }}
+          key: ${{ secrets.KEY }}
+          port: 22
+          script: |
+            mkdir -p /home/bots
+            tar -xzf /tmp/${{ github.sha }}.tar.gz -C /home/bots
+            cd /home/bots/whiskyh
+            mv /home/bots/.whiskyh.env .env
+            cd /home/bots/cooffeh
+            mv /home/bots/.cooffeh.env .env
+            docker-compose up -d
+            docker-compose restart
+            rm -rf /tmp/*.tar.gz
