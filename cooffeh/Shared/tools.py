@@ -3,6 +3,7 @@ from Shared import message
 from secrets import token_urlsafe
 from os import popen
 from datetime import datetime as dt
+from threading import Thread
 
 def getCommand(data):
     return data.split('_')
@@ -10,6 +11,9 @@ def getCommand(data):
 def cacheName(name):
     now = dt.now()
     return f"{now.day}{'AM' if now.hour < 12 else 'PM'}{name}.txt"
+
+def backgroundTask(run):
+    return Thread(target=run()).start()
 
 async def clear():
     popen('rm -rf ./Contents/*')

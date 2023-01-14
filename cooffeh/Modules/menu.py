@@ -1,8 +1,7 @@
 from Modules import qrcode, youtube, instagram, video, adult
 from Modules.Adult import magazine
-from Models import Command
+from Models.Command import Command
 from Shared import message, tools, reply
-from threading import Thread
 
 class Commands:
     
@@ -28,25 +27,25 @@ class Commands:
             'MP4 video')
     
     async def showAdultCallback(msg):
-        Thread(target=adult.run(), name="writeCache").start()
+        tools.backgroundTask(adult.run)
         return await reply.start(msg, '1_adult')
 
     async def showMagazineCallback(msg):
-        Thread(target=magazine.run(), name="writeCache").start()
+        tools.backgroundTask(magazine.run)
         return await reply.start(msg, '1_magazine')
 
     async def clearContents(msg):
         return await tools.clear()
 
     menu = [
-        Command.add('password', randomPassword),
-        Command.add('youtube', downloadYoutubeVideo),
-        Command.add('instagram', downloadInstagramImagePost),
-        Command.add('qrcode', generateQRCode),
-        Command.add('videomp4', videoMP4Download),
-        Command.add('adult', showAdultCallback),
-        Command.add('magazine', showMagazineCallback),
-        Command.add('cleard', clearContents),
+        Command('password', randomPassword),
+        Command('youtube', downloadYoutubeVideo),
+        Command('instagram', downloadInstagramImagePost),
+        Command('qrcode', generateQRCode),
+        Command('videomp4', videoMP4Download),
+        Command('adult', showAdultCallback),
+        Command('magazine', showMagazineCallback),
+        Command('cleard', clearContents),
     ]
 
 class Callbacks:
@@ -75,7 +74,7 @@ class Callbacks:
             reply_markup=reply.magazine(index))
 
     menu = [
-        Command.add('adult', adultVideo),
-        Command.add('downloadAdult', downloadAdultVideo),
-        Command.add('magazine', magazineImage)
+        Command('adult', adultVideo),
+        Command('downloadAdult', downloadAdultVideo),
+        Command('magazine', magazineImage)
     ]

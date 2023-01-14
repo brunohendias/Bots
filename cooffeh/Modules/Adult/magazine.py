@@ -20,6 +20,8 @@ def getImages(basepath, ul):
         cache.writeline(image)
 
 def run():
+    if cache.exist():
+        return True
     cache.delOld()
     basepath = 'https://www.playboytv.com'
     html = get(basepath).text
