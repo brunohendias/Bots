@@ -8,7 +8,8 @@ def getCommand(data):
     return data.split('_')
 
 def cacheName(name):
-    return f"{'AM' if dt.now().hour < 12 else 'PM'}{name}.txt"
+    now = dt.now()
+    return f"{now.day}{'AM' if now.hour < 12 else 'PM'}{name}.txt"
 
 async def clear():
     popen('rm -rf ./Contents/*')
