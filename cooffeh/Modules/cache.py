@@ -1,6 +1,6 @@
 from json import dumps, loads
 from os import popen, path
-from linecache import getline
+from linecache import getline, clearcache
 
 class Cache:
     title = 'Cache'
@@ -16,12 +16,13 @@ class Cache:
         return path.exists(self.path)
 
     def delOld(self):
-        return popen(f'rm -rf ./Contents/*.txt')
+        popen(f'rm -rf ./Contents/*.txt')
+        return clearcache()
 
-    def readline(self, index=0):
+    def readline(self, index=1):
         load = self.obj()
         line = getline(self.path, index)
-        load.__dict__ = {} if not line else loads(line)
+        load.__dict__ = loads(line) if line else {}
         return load
 
     def writeline(self, obj):

@@ -12,6 +12,11 @@ def magazine(i):
         [ KB('<', f"{i-1}_magazine"),KB('>', f"{i+1}_magazine") ]
     ])
 
+def google(i):
+    return KM([
+        [ KB('<', f"{i-1}_google"),KB('>', f"{i+1}_google") ]
+    ])
+
 async def start(msg, query_):
     return await msg.reply(
         text='Lets show!!', 

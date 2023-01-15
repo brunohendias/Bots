@@ -1,4 +1,9 @@
 class Image:
     name = ''
     img = ''
-    link = ''
+    site = ''
+    page = ''
+    searchTerms = ''
+
+    def __repr__(self):
+        return self.name

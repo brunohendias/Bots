@@ -1,4 +1,4 @@
-from Modules import qrcode, youtube, instagram, video, adult
+from Modules import qrcode, youtube, instagram, video, adult, google
 from Modules.Adult import magazine
 from Models.Command import Command
 from Shared import message, tools, reply
@@ -27,12 +27,17 @@ class Commands:
             'MP4 video')
     
     async def showAdultCallback(msg):
-        tools.backgroundTask(adult.run)
+        tools.backgroundTask(adult.run())
         return await reply.start(msg, '1_adult')
 
     async def showMagazineCallback(msg):
-        tools.backgroundTask(magazine.run)
+        tools.backgroundTask(magazine.run())
         return await reply.start(msg, '1_magazine')
+
+    async def searchGoogleImagesCallback(msg):
+        term = msg.text.lower().replace('search ', '')
+        tools.backgroundTask(google.searchImages(term))
+        return await reply.start(msg, '1_google')
 
     async def clearContents(msg):
         return await tools.clear()
@@ -45,6 +50,7 @@ class Commands:
         Command('videomp4', videoMP4Download),
         Command('adult', showAdultCallback),
         Command('magazine', showMagazineCallback),
+        Command('search', searchGoogleImagesCallback),
         Command('cleard', clearContents),
     ]
 
@@ -73,8 +79,18 @@ class Callbacks:
             message.magazine(content),
             reply_markup=reply.magazine(index))
 
+    async def googleImageSearch(msg, index):
+        content = google.getImage(index)
+        if not content.name:
+            index = 1
+            content = google.getImage(1)
+        return await msg.edit_message_text(
+            message.google(content),
+            reply_markup=reply.google(index))
+
     menu = [
         Command('adult', adultVideo),
         Command('downloadAdult', downloadAdultVideo),
-        Command('magazine', magazineImage)
+        Command('magazine', magazineImage),
+        Command('google', googleImageSearch),
     ]

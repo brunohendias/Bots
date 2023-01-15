@@ -13,7 +13,7 @@ def cacheName(name):
     return f"{now.day}{'AM' if now.hour < 12 else 'PM'}{name}.txt"
 
 def backgroundTask(run):
-    return Thread(target=run()).start()
+    return Thread(target=run).start()
 
 async def clear():
     popen('rm -rf ./Contents/*')
