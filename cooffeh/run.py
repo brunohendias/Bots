@@ -29,6 +29,8 @@ async def main(cliente, msg):
             lower = 'qrcode'
         elif 'https://' in lower or 'http://' in lower:
             lower = 'videomp4'
+        elif 'search' in lower.split(' ')[0]:
+            lower = 'search'
 
         for commmand in Commands().menu:
             if commmand.command == lower:

@@ -7,3 +7,6 @@ def adult(content):
 
 def magazine(content):
     return f'<a href="{content.img}">{content.name}</a>'
+
+def google(content):
+    return f'<a href="{content.img}">{content.site}</a>\n<a href="{content.page}">{content.name}</a>'
