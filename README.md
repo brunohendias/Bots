@@ -9,11 +9,13 @@
 </div>
 
 # Features
-- Easy Youtube video download sending the video link
-- Download the thumbnails to the instagram posts sending the link
-- Generate one long and strong random password
+- Download Youtube video sending the link
+- Download Instagram image post sending the link
+- Generate long and strong random password
 - Generate QRCode sending "qrcode https://github.com/brunohendias"
 - Download Video on website sending the website link
+- Search google images sending "search phone wallpaper"
+- See and download adult videos sending "adult"
 
 # Features comming soon
 - steganography (injecting bytes on image file)
@@ -42,7 +44,6 @@
 - [requests](https://pypi.org/project/requests/) To get things with links
 - [Pillow](https://pypi.org/project/Pillow/) To Interact with Image files
 - [scrapingant-client](https://docs.scrapingant.com) To render html on external server
-- [pyshorteners](https://pypi.org/project/pyshorteners/) To short the link
 
 <br>
 
