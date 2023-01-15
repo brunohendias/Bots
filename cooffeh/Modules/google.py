@@ -1,6 +1,5 @@
 from Models.Image import Image
 from Modules.cache import Cache
-from Modules import logger
 from Shared import tools
 from os import getenv
 from requests import get
@@ -20,11 +19,9 @@ def searchImages(term:str, total=40):
     query = '&q=' + term.replace(" ", "+")
 
     for r in range(5):
-        logger.debug(start)
         start = f'&start={start}'
         link = ''.join([baseurl, key, '&searchType=image', query, start])
         content = get(link).content
-        logger.debug(content)
         json = loads(content)
 
         for item in json['items']:
