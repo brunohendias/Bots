@@ -1,0 +1,9 @@
+TgCrypto
+Pyrogram
+beautifulsoup4
+requests
+python-dotenv
+pytube
+qrcode
+scrapingant-client
+jurigged
