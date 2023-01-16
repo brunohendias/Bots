@@ -13,24 +13,23 @@ def getVideo(index=1):
     return cache.readline(index)
 
 def run():
-    if cache.exist():
-        return True
-    cache.delOld()
-    html = get(basepath).text
-    soup = bs(html, 'html.parser')
-    tags = soup.find_all('div', {'data-id': True})
-    for tag in tags:
-        a = tag.find('p', 'title').find('a')
-        if not a:
-            pass
-        video = Video()
-        video.site = 'Xvideos'
-        video.title = a.text
-        video.href = basepath + a.attrs['href']
-        video.thumb = tag.find('img').attrs['data-src']
-        cache.writeline(video)
-    hub.run(cache)
-    red.run(cache)
+    if not cache.exist():
+        cache.delOld('adult')
+        html = get(basepath).text
+        soup = bs(html, 'html.parser')
+        tags = soup.find_all('div', {'data-id': True})
+        for tag in tags:
+            a = tag.find('p', 'title').find('a')
+            if not a:
+                pass
+            video = Video()
+            video.site = 'Xvideos'
+            video.title = a.text
+            video.href = basepath + a.attrs['href']
+            video.thumb = tag.find('img').attrs['data-src']
+            cache.writeline(video)
+        hub.run(cache)
+        red.run(cache)
 
 def download(href, link=''):
     if not link:

@@ -12,7 +12,7 @@ def getImage(index):
     return cache.readline(index)
 
 def searchImages(term:str, total=40):
-    cache.delOld()
+    cache.delOld('google')
     start = 0
     cx = getenv('GOOGLE_API_CX')
     key = '&key=' + getenv('GOOGLE_API_KEY')

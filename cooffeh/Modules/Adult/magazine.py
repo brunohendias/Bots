@@ -20,14 +20,13 @@ def getImages(basepath, ul):
         cache.writeline(image)
 
 def run():
-    if cache.exist():
-        return True
-    cache.delOld()
-    basepath = 'https://www.playboytv.com'
-    html = get(basepath).text
-    soup = bs(html, 'html.parser')
-    getImages(basepath, soup.find('ul', 'swiper-wrapper'))
-    basepath = 'https://www.playboytv.com/models'
-    html = get(basepath).text
-    soup = bs(html, 'html.parser')
-    getImages(basepath, soup.find('ul', 'grid gridFive list-unstyled'))
+    if not cache.exist():
+        cache.delOld('magaz')
+        basepath = 'https://www.playboytv.com'
+        html = get(basepath).text
+        soup = bs(html, 'html.parser')
+        getImages(basepath, soup.find('ul', 'swiper-wrapper'))
+        basepath = 'https://www.playboytv.com/models'
+        html = get(basepath).text
+        soup = bs(html, 'html.parser')
+        getImages(basepath, soup.find('ul', 'grid gridFive list-unstyled'))
