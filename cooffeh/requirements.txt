@@ -1,10 +1,8 @@
-jurigged
+TgCrypto
 Pyrogram
-python-dotenv
-pytube
 beautifulsoup4
 requests
-Pillow
+python-dotenv
+pytube
 qrcode
 scrapingant-client
-pyshorteners
