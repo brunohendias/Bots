@@ -15,8 +15,8 @@ class Cache:
     def exist(self):
         return path.exists(self.path)
 
-    def delOld(self):
-        popen(f'rm -rf ./Contents/*.txt')
+    def delOld(self, name):
+        popen(f'rm -rf ./Contents/*{name}.txt')
         return clearcache()
 
     def readline(self, index=1):

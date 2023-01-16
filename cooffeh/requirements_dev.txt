@@ -1,8 +1,9 @@
 TgCrypto
 Pyrogram
-python-dotenv
-pytube
 beautifulsoup4
 requests
+python-dotenv
+pytube
 qrcode
 scrapingant-client
+jurigged
