@@ -59,10 +59,11 @@ jobs:
             mv /home/bots/.cooffeh.env .env
             python3 -m venv venv
             source venv/bin/activate
+            ls
             pip install -r requirements.txt
             rm -rf Tests /tmp/*.tar.gz
             rm requirements_dev.txt \
               requirements.txt \
               .env.example \
               test.py
-            nohup python run.py &
+            python run.py & ls
