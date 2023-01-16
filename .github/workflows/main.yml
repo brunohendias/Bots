@@ -57,6 +57,11 @@ jobs:
             mv /home/bots/.whiskyh.env .env
             cd /home/bots/cooffeh
             mv /home/bots/.cooffeh.env .env
-            docker-compose up -d
-            docker-compose restart
-            rm -rf /tmp/*.tar.gz
+            python3 -m venv venv
+            source venv/bin/activate
+            pip install -r requirements.txt
+            rm -rf Tests /tmp/*.tar.gz
+            rm requirements_dev.txt \
+              requirements.txt \
+              .env.example \
+              test.py
