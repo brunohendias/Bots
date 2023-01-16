@@ -8,5 +8,7 @@ cooffeh/Log/*.txt
 __pycache__/
 
 .DS_Store
+venv/
+._*
 *.env
 *.session*
