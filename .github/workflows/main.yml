@@ -51,6 +51,7 @@ jobs:
           key: ${{ secrets.KEY }}
           port: 22
           script: |
+            rm -rf /home/bots
             mkdir -p /home/bots
             tar -xzf /tmp/${{ github.sha }}.tar.gz -C /home/bots
             cd /home/bots/whiskyh
@@ -59,11 +60,11 @@ jobs:
             mv /home/bots/.cooffeh.env .env
             python3 -m venv venv
             source venv/bin/activate
-            ls
             pip install -r requirements.txt
-            rm -rf Tests /tmp/*.tar.gz
+            rm -rf /tmp/*.tar.gz
             rm requirements_dev.txt \
               requirements.txt \
               .env.example \
-              test.py
-            python run.py & ls
+              Dockerfile \
+              docker-compose.yml
+            python run.py & ls & exit
