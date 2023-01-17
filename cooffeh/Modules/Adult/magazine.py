@@ -13,11 +13,12 @@ def getImages(basepath, ul):
         info = tag.find('a', 'cardLink')
         if not info:
             pass
-        image = Image()
-        image.name = info.text.strip()
-        image.img = tag.find('img').attrs['data-src']
-        image.link = basepath + info.attrs['href']
-        cache.writeline(image)
+        obj = Image()
+        obj.name = info.text.strip()
+        obj.img = tag.find('img').attrs['data-src']
+        obj.site = basepath
+        obj.page = basepath + info.attrs['href']
+        cache.writeline(obj)
 
 def run():
     if not cache.exist():

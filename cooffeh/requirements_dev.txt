@@ -4,6 +4,7 @@ beautifulsoup4
 requests
 python-dotenv
 pytube
+Pillow
 qrcode
 scrapingant-client
 jurigged

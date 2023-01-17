@@ -1,4 +1,4 @@
-from Modules.setup import app
+from Modules.setup import app, admin
 from Shared import message
 from secrets import token_urlsafe
 from os import popen
@@ -32,12 +32,10 @@ async def sendPhoto(msg, file_):
 
 async def sendVideo(msg, file_, caption):
     chat = msg.from_user.id
-    if file_ == 'no link':
-        return await app.send_message(chat, 
-            message.nolink)
-    elif file_ == 'file size':
-        return await app.send_message(chat, 
-            message.uploadLimite)
+    if not file_:
+        return await app.send_message(chat, 'Not Found!')
+    elif file_ == 'no link':
+        return await app.send_message(chat, message.nolink)
     elif file_:
         await app.send_message(chat, 'Finished with success! Sending...')
         prog = await app.send_message(chat, '0%')
@@ -46,5 +44,3 @@ async def sendVideo(msg, file_, caption):
             protect_content=True,
             progress_args=[prog],
             progress=progress)
-    else:
-        return await app.send_message(chat, 'Not Found!')
