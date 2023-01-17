@@ -56,36 +56,36 @@ class Commands:
 
 class Callbacks:
     async def adultVideo(msg, index):
-        content = adult.getVideo(index)
-        if not content.site:
+        obj = adult.getVideo(index)
+        if not obj.site:
             index = 1
-            content = adult.getVideo(1)
+            obj = adult.getVideo(1)
         return await msg.edit_message_text(
-            message.adult(content),
+            message.video(obj),
             reply_markup=reply.adult(index))
 
     async def downloadAdultVideo(msg, index):
-        content = adult.getVideo(index)
+        obj = adult.getVideo(index)
         return await tools.sendVideo(msg,
-            adult.download(content.href, content.link),
-            content.title)
+            adult.download(obj.href, obj.link),
+            obj.title)
 
     async def magazineImage(msg, index):
-        content = magazine.getImage(index)
-        if not content.name:
+        obj = magazine.getImage(index)
+        if not obj.name:
             index = 1
-            content = magazine.getImage(1)
+            obj = magazine.getImage(1)
         return await msg.edit_message_text(
-            message.magazine(content),
+            message.image(obj),
             reply_markup=reply.magazine(index))
 
     async def googleImageSearch(msg, index):
-        content = google.getImage(index)
-        if not content.name:
+        obj = google.getImage(index)
+        if not obj.name:
             index = 1
-            content = google.getImage(1)
+            obj = google.getImage(1)
         return await msg.edit_message_text(
-            message.google(content),
+            message.image(obj),
             reply_markup=reply.google(index))
 
     menu = [
