@@ -42,6 +42,9 @@ class Commands:
     async def clearContents(msg):
         return await tools.clear()
 
+    async def introduce(msg):
+        return await msg.reply(message.introduce())
+
     menu = [
         Command('password', randomPassword),
         Command('youtube', downloadYoutubeVideo),
@@ -52,6 +55,8 @@ class Commands:
         Command('magazine', showMagazineCallback),
         Command('search', searchGoogleImagesCallback),
         Command('cleard', clearContents),
+        Command('/start', introduce),
+        Command('help', introduce),
     ]
 
 class Callbacks:

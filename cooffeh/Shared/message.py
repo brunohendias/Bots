@@ -13,3 +13,22 @@ def loginfo(id, user, text):
 
 def logerr(id, user, err):
     return f"ERROR: {id}\nUser: {user}\n{err}"
+
+def introduce():
+    return """
+Welcome to the bot world
+With me you can:
+- Download Youtube video 
+    sending the link
+- Download Instagram image post 
+    sending the link
+- Generate long and strong random password 
+    sending password
+- Generate QRCode 
+    sending "qrcode https://github.com/brunohendias"
+- Download Video on website 
+    sending the website link
+I have a upload limite so, i just can send media up to 50mb
+If do you want to see this message again send help
+I hope you enjoy!
+"""
