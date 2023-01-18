@@ -1,5 +1,6 @@
 from Modules.cache import Cache
 from Models.Image import Image
+from Modules.Adult import erome
 from Shared import tools
 from bs4 import BeautifulSoup as bs
 from requests import get
@@ -23,6 +24,7 @@ def getImages(basepath, ul):
 def run():
     if not cache.exist():
         cache.delOld('magaz')
+        erome.run()
         basepath = 'https://www.playboytv.com'
         html = get(basepath).text
         soup = bs(html, 'html.parser')

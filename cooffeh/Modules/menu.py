@@ -2,6 +2,7 @@ from Modules import qrcode, youtube, instagram, video, adult, google
 from Modules.Adult import magazine
 from Models.Command import Command
 from Shared import message, tools, reply
+from threading import Thread
 
 class Commands:
     
@@ -27,16 +28,16 @@ class Commands:
             'MP4 video')
     
     async def showAdultCallback(msg):
-        tools.backgroundTask(adult.run())
+        Thread(target=adult.run).start()
         return await reply.start(msg, '1_adult')
 
     async def showMagazineCallback(msg):
-        tools.backgroundTask(magazine.run())
+        Thread(target=magazine.run).start()
         return await reply.start(msg, '1_magazine')
 
     async def searchGoogleImagesCallback(msg):
         term = msg.text.lower().replace('search ', '')
-        tools.backgroundTask(google.searchImages(term))
+        Thread(target=google.searchImages(term), cacheName='writeCache').start()
         return await reply.start(msg, '1_google')
 
     async def clearContents(msg):
