@@ -1,5 +1,5 @@
 from Modules import qrcode, youtube, instagram, video, adult, google
-from Modules.Adult import magazine
+from Modules.Adult import magazine, red, hub, xvid
 from Models.Command import Command
 from Shared import message, tools, reply
 from threading import Thread
@@ -62,13 +62,28 @@ class Commands:
 
 class Callbacks:
     async def adultVideo(msg, index):
-        obj = adult.getVideo(index)
-        if not obj.site:
-            index = 1
-            obj = adult.getVideo(1)
-        return await msg.edit_message_text(
-            message.video(obj),
-            reply_markup=reply.adult(index))
+        return await tools.preparVideo(msg, 
+            adult.getVideo, index)
+
+    async def xvidVideo(msg, index):
+        return await tools.preparVideo(msg, 
+            xvid.getVideo, index)
+
+    async def hubVideo(msg, index):
+        return await tools.preparVideo(msg, 
+            hub.getVideo, index)
+
+    async def redVideo(msg, index):
+        return await tools.preparVideo(msg, 
+            red.getVideo, index)
+
+    async def magazineImage(msg, index):
+        return await tools.preparImage(msg, 
+            magazine.getImage, index, 'magaz')
+
+    async def googleImageSearch(msg, index):
+        return await tools.preparImage(msg, 
+            google.getImage, index, 'goo')
 
     async def downloadAdultVideo(msg, index):
         obj = adult.getVideo(index)
@@ -76,27 +91,12 @@ class Callbacks:
             adult.download(obj.href, obj.link),
             obj.title)
 
-    async def magazineImage(msg, index):
-        obj = magazine.getImage(index)
-        if not obj.name:
-            index = 1
-            obj = magazine.getImage(1)
-        return await msg.edit_message_text(
-            message.image(obj),
-            reply_markup=reply.magazine(index))
-
-    async def googleImageSearch(msg, index):
-        obj = google.getImage(index)
-        if not obj.name:
-            index = 1
-            obj = google.getImage(1)
-        return await msg.edit_message_text(
-            message.image(obj),
-            reply_markup=reply.google(index))
-
     menu = [
         Command('adult', adultVideo),
+        Command('xvid', xvidVideo),
+        Command('red', redVideo),
+        Command('hub', hubVideo),
+        Command('magaz', magazineImage),
+        Command('goo', googleImageSearch),
         Command('downloadAdult', downloadAdultVideo),
-        Command('magazine', magazineImage),
-        Command('google', googleImageSearch),
     ]
