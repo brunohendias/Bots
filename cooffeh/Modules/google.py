@@ -10,19 +10,17 @@ cache = Cache(Image, tools.cacheName('google'))
 def getImage(index):
     return cache.readline(index)
 
-def searchImages(term:str, total=40):
+def run(term:str):
     cache.delOld('google')
     cx = getenv('GOOGLE_API_CX')
-    key = '&key=' + getenv('GOOGLE_API_KEY')
+    key = getenv('GOOGLE_API_KEY')
     baseurl = 'https://customsearch.googleapis.com/customsearch/v1?cx='+cx
-    query = '&q=' + term.replace(" ", "+")
-    ini, end, salto, limite = 0, 0, 20, 80
+    ini, end, salto, limite = 0, 0, 20, 60
     totreq = limite // salto
     for r in range(totreq):
         ini = end
         end += salto
-        start = f'&start={randint(ini, end)}'
-        link = ''.join([baseurl, key, '&searchType=image', query, start])
+        link = f'{baseurl}&key={key}&searchType=image&q={term.replace(" ", "+")}&start={randint(ini, end)}'
         content = get(link).content
         json = loads(content)
         for item in json['items']:

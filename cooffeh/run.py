@@ -1,7 +1,7 @@
 from Modules.menu import Callbacks, Commands
 from Modules.setup import app, admin
 from Shared import tools, message
-    
+
 @app.on_callback_query()
 async def callback(client, msg):
     usr = msg.from_user
@@ -12,7 +12,7 @@ async def callback(client, msg):
                 return await c.action(msg, int(call[0]))
     except Exception as err:
         return await app.send_message(admin,
-            message.logerr(usr.id, usr.first_name, err))
+            message.logerr(usr.id, usr.first_name, err, msg.data))
 
 @app.on_message()
 async def main(cliente, msg):
@@ -38,7 +38,7 @@ async def main(cliente, msg):
                 return await commmand.action(msg)
     except Exception as err:
         return await app.send_message(admin,
-            message.logerr(usr.id, usr.first_name, err))
+            message.logerr(usr.id, usr.first_name, err, msg.text))
 
 print('Running...')
 app.run()

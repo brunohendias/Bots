@@ -1,7 +1,8 @@
 from Modules import qrcode, youtube, instagram, video, adult, google
-from Modules.Adult import magazine
+from Modules.Adult import magaz, red, hub, xvid
 from Models.Command import Command
 from Shared import message, tools, reply
+from threading import Thread
 
 class Commands:
     
@@ -26,17 +27,17 @@ class Commands:
             video.downloadMP4(msg.text),
             'MP4 video')
     
-    async def showAdultCallback(msg):
-        tools.backgroundTask(adult.run())
-        return await reply.start(msg, '1_adult')
+    async def showAdult(msg):
+        Thread(target=adult.run).start()
+        return await reply.start(msg, '1_xvid')
 
-    async def showMagazineCallback(msg):
-        tools.backgroundTask(magazine.run())
-        return await reply.start(msg, '1_magazine')
+    async def showMagazine(msg):
+        Thread(target=magaz.run).start()
+        return await reply.start(msg, '1_magaz')
 
-    async def searchGoogleImagesCallback(msg):
+    async def searchGoogleImages(msg):
         term = msg.text.lower().replace('search ', '')
-        tools.backgroundTask(google.searchImages(term))
+        Thread(target=google.run(term)).start()
         return await reply.start(msg, '1_google')
 
     async def clearContents(msg):
@@ -51,51 +52,58 @@ class Commands:
         Command('instagram', downloadInstagramImagePost),
         Command('qrcode', generateQRCode),
         Command('videomp4', videoMP4Download),
-        Command('adult', showAdultCallback),
-        Command('magazine', showMagazineCallback),
-        Command('search', searchGoogleImagesCallback),
+        Command('adult', showAdult),
+        Command('magazine', showMagazine),
+        Command('search', searchGoogleImages),
         Command('cleard', clearContents),
         Command('/start', introduce),
-        Command('help', introduce),
+        Command('help', introduce)
     ]
 
 class Callbacks:
-    async def adultVideo(msg, index):
-        obj = adult.getVideo(index)
-        if not obj.site:
-            index = 1
-            obj = adult.getVideo(1)
-        return await msg.edit_message_text(
-            message.video(obj),
-            reply_markup=reply.adult(index))
 
-    async def downloadAdultVideo(msg, index):
-        obj = adult.getVideo(index)
-        return await tools.sendVideo(msg,
-            adult.download(obj.href, obj.link),
-            obj.title)
+    async def showSites(msg, index):
+        return await tools.showSites(msg)
 
-    async def magazineImage(msg, index):
-        obj = magazine.getImage(index)
-        if not obj.name:
-            index = 1
-            obj = magazine.getImage(1)
-        return await msg.edit_message_text(
-            message.image(obj),
-            reply_markup=reply.magazine(index))
+    async def xvidVideo(msg, index):
+        return await tools.preparVideo(msg, 
+            xvid.getVideo, index, 'xvid')
+
+    async def hubVideo(msg, index):
+        return await tools.preparVideo(msg, 
+            hub.getVideo, index, 'hub')
+
+    async def redVideo(msg, index):
+        return await tools.preparVideo(msg, 
+            red.getVideo, index, 'red')
+
+    async def magazine(msg, index):
+        return await tools.preparImage(msg, 
+            magaz.getImage, index, 'magaz')
 
     async def googleImageSearch(msg, index):
-        obj = google.getImage(index)
-        if not obj.name:
-            index = 1
-            obj = google.getImage(1)
-        return await msg.edit_message_text(
-            message.image(obj),
-            reply_markup=reply.google(index))
+        return await tools.preparImage(msg, 
+            google.getImage, index, 'goo')
+
+    async def downloadXvid(msg, index):
+        resp = xvid.getLink(index)
+        return await tools.sendVideo(msg,
+            adult.download(resp['link']),
+            resp['title'])
+
+    async def downloadRed(msg, index):
+        resp = red.getLink(index)
+        return await tools.sendVideo(msg,
+            adult.download(resp['link']),
+            resp['title'])
 
     menu = [
-        Command('adult', adultVideo),
-        Command('downloadAdult', downloadAdultVideo),
-        Command('magazine', magazineImage),
-        Command('google', googleImageSearch),
+        Command('sites', showSites),
+        Command('xvid', xvidVideo),
+        Command('hub', hubVideo),
+        Command('red', redVideo),
+        Command('magaz', magazine),
+        Command('goo', googleImageSearch),
+        Command('downloadxvid', downloadXvid),
+        Command('downloadred', downloadRed)
     ]

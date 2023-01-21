@@ -1,39 +1,47 @@
+from Modules.cache import Cache
 from Models.Video import Video
+from Shared import tools
 from bs4 import BeautifulSoup as bs
 from requests import get
+# from json import loads
 
-basepath = 'https://www.redtube.com'
+cache = Cache(Video, tools.cacheName('red'))
+def getVideo(index=1):
+    return cache.readline(index)
 
-def getData(cache, ul):
-    for tag in ul.find_all('li'):
-        div = tag.find('div', 'video_title')
-        if div:
-            a = div.find('a')
-            duration = tag.find('span', 'duration')
-            video = Video()
-            video.site = 'RedTube'
-            if duration:
-                video.title = a.text.strip() + duration.text.replace(' ', '').replace('\n', ' ')
-            else:
-                video.title = a.text.strip()
-            video.href = basepath + a.attrs['href']
-            img = tag.find('img')
-            video.thumb = img.attrs['data-src']
-            video.link = img.attrs['data-mediabook']
-            cache.writeline(video)
+def run():
+    if not cache.exist():
+        cache.delOld('red')
+        basepath = 'https://www.redtube.com'
+        html = get(basepath).text
+        soup = bs(html, 'html.parser')
+        for tag in soup.find_all('li'):
+            div = tag.find('div', 'video_title')
+            if div:
+                a = div.find('a')
+                duration = tag.find('span', 'duration')
+                obj = Video()
+                obj.site = 'RedTube'
+                if duration:
+                    obj.title = a.text.strip() + duration.text.replace(' ', '').replace('\n', ' ')
+                else:
+                    obj.title = a.text.strip()
+                obj.href = basepath + a.attrs['href']
+                img = tag.find('img')
+                obj.thumb = img.attrs['data-src']
+                obj.link = img.attrs['data-mediabook']
+                cache.writeline(obj)
 
-def run(cache):
-    html = get(basepath).text
-    if not html:
-        return ''
-    soup = bs(html, 'html.parser')
-    ul = soup.find('ul', { 'id': 'block_hottest_videos_by_country' })
-    getData(cache, ul)
-    ul = soup.find('ul', { 'id': 'block_recommended_videos' })
-    getData(cache, ul)
-    ul = soup.find('ul', { 'id': 'most_recent_videos' })
-    getData(cache, ul)
-    ul = soup.find('ul', { 'id': 'recommended_videos_menu_block' })
-    getData(cache, ul)
-    ul = soup.find('ul', { 'id': 'trending_videos_block' })
-    getData(cache, ul)
+def getLink(index):
+    video = getVideo(index)
+    return {'link': video.link, 'title': video.title}
+    # html = get(video.href).text
+    # soup = bs(html, 'html.parser')
+    # script = soup.find('script', { 'id': 'tm_pc_player_setup'}).text
+    # values = script.replace('\\', '')
+    # for value in values.split(','):
+    #     if 'media/mp4' in value:
+    #         media = value.split('"')[3]
+    #         json = get(media).text
+    #         qualitys = loads(json)
+    #         return {'link': qualitys[0]['videoUrl'], 'title': video.title}
