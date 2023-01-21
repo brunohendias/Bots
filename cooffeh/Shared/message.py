@@ -11,8 +11,8 @@ def image(obj):
 def loginfo(id, user, text):
     return f"LOG: {id}\nUser: {user}\nMsg: {text}"
 
-def logerr(id, user, err):
-    return f"ERROR: {id}\nUser: {user}\n{err}"
+def logerr(id, user, err, text):
+    return f"ERROR: {id}\nUser: {user}\n{err}\n{text}"
 
 def introduce():
     return """

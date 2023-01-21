@@ -5,7 +5,6 @@ from bs4 import BeautifulSoup as bs
 from requests import get
 
 cache = Cache(Video, tools.cacheName('hub'))
-adultCache = Cache(Video, tools.cacheName('adult'))
 def getVideo(index=1):
     return cache.readline(index)
 
@@ -28,4 +27,3 @@ def run():
             obj.href = basepath + a.attrs['href']
             obj.thumb = a.find('img').attrs['src']
             cache.writeline(obj)
-            adultCache.writeline(obj)

@@ -1,17 +1,24 @@
-from pyrogram.types import InlineKeyboardButton as KB
-from pyrogram.types import InlineKeyboardMarkup as KM
+from pyrogram.types import InlineKeyboardButton as KB, InlineKeyboardMarkup as KM
 
 def carousel(index, name):
     return KM([
-        [ KB('<',f"{index-1}_{name}"),KB('>',f"{index+1}_{name}")],
-        [ KB('Download',f"{index}_download{name}")]
+        [ KB('<',f"{index-1}_{name}"),
+            KB('>',f"{index+1}_{name}")]
     ])
 
-def adult(i):
+def video(index, name):
     return KM([
-        [ KB('1', '1_adult'),KB('<', f"{i-1}_adult"),KB('>', f"{i+1}_adult") ],
-        [ KB('xvideos', '1_xvid'), KB('redtube', '1_red'), KB('pornhub', '1_hub')],
-        [ KB('Download', f"{i}_downloadAdult") ]
+        [ KB('<',f"{index-1}_{name}"),
+            KB('>',f"{index+1}_{name}")],
+        [ KB('Download',f"{index}_download{name}"),
+            KB('Other site', '1_sites')],
+    ])
+
+def sites():
+    return KM([
+        [ KB('xvideos', '1_xvid'),
+            KB('redtube', '1_red'),
+            KB('pornhub', '1_hub')]
     ])
 
 async def start(msg, name):

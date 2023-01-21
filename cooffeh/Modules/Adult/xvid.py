@@ -5,7 +5,6 @@ from bs4 import BeautifulSoup as bs
 from requests import get
 
 cache = Cache(Video, tools.cacheName('xvid'))
-adultCache = Cache(Video, tools.cacheName('adult'))
 def getVideo(index=1):
     return cache.readline(index)
 
@@ -26,4 +25,10 @@ def run():
             obj.href = basepath + a.attrs['href']
             obj.thumb = tag.find('img').attrs['data-src']
             cache.writeline(obj)
-            adultCache.writeline(obj)
+
+def getLink(index):
+    video = getVideo(index)
+    html = get(video.href).text
+    soup = bs(html, 'html.parser')
+    div = soup.find('div', {'id': 'html5video_base'})
+    return {'link': div.find('a').attrs['href'], 'title': video.title}

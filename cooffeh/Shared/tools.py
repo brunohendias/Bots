@@ -2,6 +2,7 @@ from Modules.setup import app
 from Shared import message, reply
 from os import popen
 from datetime import datetime as dt
+from secrets import token_urlsafe
 
 def getCommand(data):
     return data.split('_')
@@ -22,14 +23,20 @@ async def progress(current, total, msg):
         msg.id, 
         f"{current * 100 / total:.1f}%")
 
-async def preparVideo(msg, act, index):
+async def showSites(msg):
+    return await msg.edit_message_text(
+        'Click on one site under...',
+        reply_markup=reply.sites())
+
+
+async def preparVideo(msg, act, index, name):
     obj = act(index)
     if not obj.site:
         index = 1
         obj = act(index)
     return await msg.edit_message_text(
         message.video(obj),
-        reply_markup=reply.adult(index))
+        reply_markup=reply.video(index, name))
 
 async def preparImage(msg, act, index, name):
     obj = act(index)
@@ -57,6 +64,5 @@ async def sendVideo(msg, file_, caption):
         prog = await app.send_message(chat, '0%')
         return await app.send_video(chat, file_, 
             caption=caption, 
-            protect_content=True,
             progress_args=[prog],
             progress=progress)
