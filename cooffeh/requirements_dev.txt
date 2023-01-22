@@ -8,3 +8,5 @@ Pillow
 qrcode
 scrapingant-client
 jurigged
+pytest
+

@@ -8,14 +8,13 @@ def video(obj):
 def image(obj):
     return f'<a href="{obj.img}">{obj.site}</a>\n<a href="{obj.page}">{obj.name}</a>'
 
-def loginfo(id, user, text):
-    return f"LOG: {id}\nUser: {user}\nMsg: {text}"
+def loginfo(id_, user, text):
+    return f"LOG: {id_}\nUser: {user}\nMsg: {text}"
 
-def logerr(id, user, err, text):
-    return f"ERROR: {id}\nUser: {user}\n{err}\n{text}"
+def logerr(id_, user, err, text):
+    return f"ERROR: {id_}\nUser: {user}\n{err}\n{text}"
 
-def introduce():
-    return """
+introduce = """
 Welcome to the bot world
 With me you can:
 - Download Youtube video 
