@@ -1,6 +1,6 @@
 from Modules.setup import app
 from Shared import message, reply
-from os import popen
+from os import system
 from datetime import datetime as dt
 from secrets import token_urlsafe
 
@@ -11,11 +11,11 @@ def cacheName(name):
     now = dt.now()
     return f"{now.day}{'AM' if now.hour < 12 else 'PM'}{name}.txt"
 
-def MegaBytesToBytes(mb: int):
+def megaBytesToBytes(mb: int):
     return mb * 1000000
 
-async def clear():
-    popen('rm -rf ./Contents/*')
+def clear():
+    system('rm -rf ./Contents/*')
 
 async def progress(current, total, msg):
     await app.edit_message_text(

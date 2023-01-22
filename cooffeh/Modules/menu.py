@@ -1,4 +1,4 @@
-from Modules import qrcode, youtube, instagram, video, adult, google
+from Modules import qrcode, youtube, instagram, adult, google
 from Modules.Adult import magaz, red, hub, xvid
 from Models.Command import Command
 from Shared import message, tools, reply
@@ -21,11 +21,6 @@ class Commands:
         return await tools.sendVideo(msg,
             youtube.download(msg.text),
             'Youtube video')
-
-    async def videoMP4Download(msg):
-        return await tools.sendVideo(msg,
-            video.downloadMP4(msg.text),
-            'MP4 video')
     
     async def showAdult(msg):
         Thread(target=adult.run).start()
@@ -47,17 +42,17 @@ class Commands:
         return await reply.start(msg, '1_xvid')
 
     async def clearContents(msg):
-        return await tools.clear()
+        tools.clear()
+        return await msg.reply('Done')
 
     async def introduce(msg):
-        return await msg.reply(message.introduce())
+        return await msg.reply(message.introduce)
 
     menu = [
         Command('password', randomPassword),
         Command('youtube', downloadYoutubeVideo),
         Command('instagram', downloadInstagramImagePost),
         Command('qrcode', generateQRCode),
-        Command('videomp4', videoMP4Download),
         Command('adult', showAdult),
         Command('magazine', showMagazine),
         Command('search', searchGoogleImages),

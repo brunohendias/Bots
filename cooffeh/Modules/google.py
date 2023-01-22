@@ -7,20 +7,18 @@ from json import loads
 from random import randint
 cache = Cache(Image, tools.cacheName('google'))
 
-def getImage(index):
+def getImage(index=1):
     return cache.readline(index)
 
-def run(term:str):
+def run(term:str,reqs=4):
     cache.delOld('google')
     cx = getenv('GOOGLE_API_CX')
     key = getenv('GOOGLE_API_KEY')
     baseurl = 'https://customsearch.googleapis.com/customsearch/v1?cx='+cx
-    ini, end, salto, limite = 0, 0, 20, 60
-    totreq = limite // salto
-    for r in range(totreq):
-        ini = end
-        end += salto
-        link = f'{baseurl}&key={key}&searchType=image&q={term.replace(" ", "+")}&start={randint(ini, end)}'
+    term = term.replace(' ', '+')
+    start = 0
+    for req in range(reqs):
+        link = f'{baseurl}&key={key}&searchType=image&q={term}&start={start}'
         content = get(link).content
         json = loads(content)
         for item in json['items']:
@@ -31,3 +29,4 @@ def run(term:str):
             obj.page = item['image']['contextLink']
             obj.searchTerms = term
             cache.writeline(obj)
+        start += 20

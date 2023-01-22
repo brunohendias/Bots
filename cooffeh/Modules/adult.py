@@ -12,7 +12,7 @@ def search(term: str):
 
 def download(link: str):
     content = get(link).content
-    if len(content) > tools.MegaBytesToBytes(50):
+    if len(content) > tools.megaBytesToBytes(50):
         return ''
     file_ = './Contents/video.mp4'
     with open(file_, 'wb') as f:

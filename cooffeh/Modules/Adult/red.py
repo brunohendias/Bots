@@ -3,7 +3,7 @@ from Models.Video import Video
 from Shared import tools
 from bs4 import BeautifulSoup as bs
 from requests import get
-# from json import loads
+from json import loads
 
 cache = Cache(Video, tools.cacheName('red'))
 def getVideo(index=1):
@@ -35,13 +35,16 @@ def run():
 def getLink(index):
     video = getVideo(index)
     return {'link': video.link, 'title': video.title}
-    # html = get(video.href).text
-    # soup = bs(html, 'html.parser')
-    # script = soup.find('script', { 'id': 'tm_pc_player_setup'}).text
-    # values = script.replace('\\', '')
-    # for value in values.split(','):
-    #     if 'media/mp4' in value:
-    #         media = value.split('"')[3]
-    #         json = get(media).text
-    #         qualitys = loads(json)
-    #         return {'link': qualitys[0]['videoUrl'], 'title': video.title}
+
+def getRealLink(index):
+    video = getVideo(index)
+    html = get(video.href).text
+    soup = bs(html, 'html.parser')
+    script = soup.find('script', { 'id': 'tm_pc_player_setup'}).text
+    values = script.replace('\\', '')
+    for value in values.split(','):
+        if 'media/mp4' in value:
+            media = value.split('"')[3]
+            json = get(media).text
+            qualitys = loads(json)
+            return {'link': qualitys[0]['videoUrl'], 'title': video.title}

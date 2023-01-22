@@ -6,13 +6,11 @@ cooffeh/Log/*.txt
 *.jpg
 *.html
 __pycache__/
-
+*pytest*
 .DS_Store
-<<<<<<< HEAD
 venv/
-=======
 venv
->>>>>>> main
 ._*
 *.env
 *.session*
+
