@@ -7,13 +7,14 @@ def run():
     hub.run()
     red.run()
 
-def download(link):
-    if not link:
-        return ''
-    file_ = './Contents/video.mp4'
+def search(term: str):
+    xvid.search(term)
+
+def download(link: str):
     content = get(link).content
     if len(content) > tools.MegaBytesToBytes(50):
         return ''
+    file_ = './Contents/video.mp4'
     with open(file_, 'wb') as f:
         f.write(content)
     return file_

@@ -38,7 +38,13 @@ class Commands:
     async def searchGoogleImages(msg):
         term = msg.text.lower().replace('search ', '')
         Thread(target=google.run(term)).start()
-        return await reply.start(msg, '1_google')
+        return await reply.start(msg, '1_goo')
+
+    async def searchAdult(msg):
+        term = msg.text.lower().replace('xsearch ', 
+            '').replace(' ', '+')
+        Thread(target=adult.search(term)).start()
+        return await reply.start(msg, '1_xvid')
 
     async def clearContents(msg):
         return await tools.clear()
@@ -55,6 +61,7 @@ class Commands:
         Command('adult', showAdult),
         Command('magazine', showMagazine),
         Command('search', searchGoogleImages),
+        Command('xsearch', searchAdult),
         Command('cleard', clearContents),
         Command('/start', introduce),
         Command('help', introduce)
@@ -97,6 +104,12 @@ class Callbacks:
             adult.download(resp['link']),
             resp['title'])
 
+    async def downloadHub(msg, index):
+        resp = hub.getLink(index)
+        return await tools.sendVideo(msg,
+            adult.download(resp['link']),
+            resp['title'])
+
     menu = [
         Command('sites', showSites),
         Command('xvid', xvidVideo),
@@ -105,5 +118,6 @@ class Callbacks:
         Command('magaz', magazine),
         Command('goo', googleImageSearch),
         Command('downloadxvid', downloadXvid),
-        Command('downloadred', downloadRed)
+        Command('downloadred', downloadRed),
+        Command('downloadhub', downloadHub)
     ]
