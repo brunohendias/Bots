@@ -19,11 +19,16 @@ def run():
         tags = soup.find_all('li', 'pcVideoListItem')
         for tag in tags:
             a = tag.find('a')
-            if not a:
-                pass
-            obj = Video()
-            obj.site = 'PornHub'
-            obj.title = a.attrs['title']
-            obj.href = basepath + a.attrs['href']
-            obj.thumb = a.find('img').attrs['src']
-            cache.writeline(obj)
+            if a:
+                obj = Video()
+                obj.site = 'PornHub'
+                obj.title = a.attrs['title']
+                obj.href = basepath + a.attrs['href']
+                obj.thumb = a.find('img').attrs['src']
+                img = tag.find('img')
+                obj.link = img.attrs['data-mediabook']
+                cache.writeline(obj)
+
+def getLink(index):
+    video = getVideo(index)
+    return {'link': video.link, 'title': video.title}

@@ -29,6 +29,8 @@ async def main(cliente, msg):
             lower = 'qrcode'
         elif 'https://' in lower or 'http://' in lower:
             lower = 'videomp4'
+        elif 'xsearch' in lower.split(' ')[0]:
+            lower = 'xsearch'
         elif 'search' in lower.split(' ')[0]:
             lower = 'search'
 
