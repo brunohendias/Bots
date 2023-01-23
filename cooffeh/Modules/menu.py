@@ -1,5 +1,6 @@
-from Modules import qrcode, youtube, instagram, adult, google
-from Modules.Adult import magaz, red, hub, xvid
+from Modules import qrcode, youtube, instagram, adult
+from Modules.Adult import magaz, goo
+from importlib import import_module as adt
 from Models.Command import Command
 from Shared import message, tools, reply
 from threading import Thread
@@ -31,14 +32,13 @@ class Commands:
         return await reply.start(msg, '1_magaz')
 
     async def searchGoogleImages(msg):
-        term = msg.text.lower().replace('search ', '')
-        Thread(target=google.run(term)).start()
+        goo.run(msg.text.lower().replace('search ', ''))
         return await reply.start(msg, '1_goo')
 
     async def searchAdult(msg):
-        term = msg.text.lower().replace('xsearch ', 
-            '').replace(' ', '+')
-        Thread(target=adult.search(term)).start()
+        term = msg.text.lower().replace(
+            'xsearch ', '').replace(' ', '+')
+        Thread(target=adult.search, args=[term]).start()
         return await reply.start(msg, '1_xvid')
 
     async def clearContents(msg):
@@ -64,55 +64,39 @@ class Commands:
 
 class Callbacks:
 
-    async def showSites(msg, index):
-        return await tools.showSites(msg)
+    async def showSites(msg, index, com):
+        return await msg.edit_message_text(
+            'Choose One Site',
+            reply_markup=reply.sites())
 
-    async def xvidVideo(msg, index):
-        return await tools.preparVideo(msg, 
-            xvid.getVideo, index, 'xvid')
+    async def preparVideo(msg, index, com):
+        obj = adt('Modules.Adult.'+com).getVideo(index)
+        return await msg.edit_message_text(
+            message.video(obj),
+            reply_markup=reply.video(index, com))
 
-    async def hubVideo(msg, index):
-        return await tools.preparVideo(msg, 
-            hub.getVideo, index, 'hub')
+    async def preparImage(msg, index, com):
+        obj = adt('Modules.Adult.'+com).getImage(index)
+        return await msg.edit_message_text(
+            message.image(obj),
+            reply_markup=reply.carousel(index, com))
 
-    async def redVideo(msg, index):
-        return await tools.preparVideo(msg, 
-            red.getVideo, index, 'red')
-
-    async def magazine(msg, index):
-        return await tools.preparImage(msg, 
-            magaz.getImage, index, 'magaz')
-
-    async def googleImageSearch(msg, index):
-        return await tools.preparImage(msg, 
-            google.getImage, index, 'goo')
-
-    async def downloadXvid(msg, index):
-        resp = xvid.getLink(index)
-        return await tools.sendVideo(msg,
-            adult.download(resp['link']),
-            resp['title'])
-
-    async def downloadRed(msg, index):
-        resp = red.getLink(index)
-        return await tools.sendVideo(msg,
-            adult.download(resp['link']),
-            resp['title'])
-
-    async def downloadHub(msg, index):
-        resp = hub.getLink(index)
+    async def download(msg, index, com):
+        com = com.replace('download', '')
+        resp = adt('Modules.Adult.'+com).getLink(index)
         return await tools.sendVideo(msg,
             adult.download(resp['link']),
             resp['title'])
 
     menu = [
         Command('sites', showSites),
-        Command('xvid', xvidVideo),
-        Command('hub', hubVideo),
-        Command('red', redVideo),
-        Command('magaz', magazine),
-        Command('goo', googleImageSearch),
-        Command('downloadxvid', downloadXvid),
-        Command('downloadred', downloadRed),
-        Command('downloadhub', downloadHub)
+        Command('xvid', preparVideo),
+        Command('hub', preparVideo),
+        Command('red', preparVideo),
+        Command('brasa', preparVideo),
+        Command('magaz', preparImage),
+        Command('goo', preparImage),
+        Command('downloadxvid', download),
+        Command('downloadred', download),
+        Command('downloadhub', download)
     ]

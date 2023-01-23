@@ -9,7 +9,7 @@ async def callback(client, msg):
         call = tools.getCommand(msg.data)
         for c in Callbacks().menu:
             if call[1] == c.command:
-                return await c.action(msg, int(call[0]))
+                return await c.action(msg, int(call[0]), call[1])
     except Exception as err:
         return await app.send_message(admin,
             message.logerr(usr.id, usr.first_name, err, msg.data))

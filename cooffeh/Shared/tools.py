@@ -1,5 +1,5 @@
 from Modules.setup import app
-from Shared import message, reply
+from Shared import message
 from os import system
 from datetime import datetime as dt
 from secrets import token_urlsafe
@@ -22,30 +22,6 @@ async def progress(current, total, msg):
         msg.chat.id, 
         msg.id, 
         f"{current * 100 / total:.1f}%")
-
-async def showSites(msg):
-    return await msg.edit_message_text(
-        'Click on one site under...',
-        reply_markup=reply.sites())
-
-
-async def preparVideo(msg, act, index, name):
-    obj = act(index)
-    if not obj.site:
-        index = 1
-        obj = act(index)
-    return await msg.edit_message_text(
-        message.video(obj),
-        reply_markup=reply.video(index, name))
-
-async def preparImage(msg, act, index, name):
-    obj = act(index)
-    if not obj.name:
-        index = 1
-        obj = act(index)
-    return await msg.edit_message_text(
-        message.image(obj),
-        reply_markup=reply.carousel(index, name))
 
 async def sendPhoto(msg, file_):
     if not file_:
