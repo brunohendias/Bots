@@ -52,18 +52,19 @@ jobs:
           port: 22
           script: |
             rm -rf /home/bots
-            mkdir -p /home/bots
+            mkdir /home/bots
             tar -xzf /tmp/${{ github.sha }}.tar.gz -C /home/bots
+            rm -rf /home/bots/.git*
             cd /home/bots/whiskyh
             mv /home/bots/.whiskyh.env .env
             cd /home/bots/cooffeh
             mv /home/bots/.cooffeh.env .env
             python3 -m venv venv
             source venv/bin/activate
-            pip install -r requirements.txt
+            pip install -r reqs.txt
             rm -rf Tests /tmp/*.tar.gz
-            rm requirements_dev.txt \
-              requirements.txt \
+            rm devreqs.txt \
+              reqs.txt \
               .env.example \
               Dockerfile \
               docker-compose.yml
