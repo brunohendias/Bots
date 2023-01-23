@@ -5,38 +5,49 @@ from bs4 import BeautifulSoup as bs
 from requests import get
 from json import loads
 
+basepath = 'https://www.redtube.com'
 cache = Cache(Video, tools.cacheName('red'))
 def getVideo(index=1):
     return cache.readline(index)
 
+def getData(link:str):
+    html = get(link).text
+    soup = bs(html, 'html.parser')
+    for li in soup.find_all('li'):
+        div = li.find('div', 'video_title')
+        if div:
+            a = div.find('a')
+            duration = li.find('span', 'duration')
+            obj = Video()
+            obj.site = 'RedTube'
+            if duration:
+                obj.title = a.text.strip() + duration.text.replace(' ', '').replace('\n', ' ')
+            else:
+                obj.title = a.text.strip()
+            obj.href = basepath + a.attrs['href']
+            img = li.find('img')
+            obj.thumb = img.attrs['data-src']
+            obj.link = img.attrs['data-mediabook']
+            cache.writeline(obj)
+
 def run():
     if not cache.exist():
         cache.delOld('red')
-        basepath = 'https://www.redtube.com'
-        html = get(basepath).text
-        soup = bs(html, 'html.parser')
-        for tag in soup.find_all('li'):
-            div = tag.find('div', 'video_title')
-            if div:
-                a = div.find('a')
-                duration = tag.find('span', 'duration')
-                obj = Video()
-                obj.site = 'RedTube'
-                if duration:
-                    obj.title = a.text.strip() + duration.text.replace(' ', '').replace('\n', ' ')
-                else:
-                    obj.title = a.text.strip()
-                obj.href = basepath + a.attrs['href']
-                img = tag.find('img')
-                obj.thumb = img.attrs['data-src']
-                obj.link = img.attrs['data-mediabook']
-                cache.writeline(obj)
+        getData(basepath)
+        for page in ['2', '3']:
+            getData(basepath + '/?page=' + page)
 
-def getLink(index):
+def getLink(index:int):
     video = getVideo(index)
     return {'link': video.link, 'title': video.title}
 
-def getRealLink(index):
+def search(term:str):
+    cache.delOld('red')
+    getData(basepath + f'/?search={term}')
+    for page in ['2', '3']:
+        getData(basepath + f'/?search={term}&page=' + page)
+
+def getRealLink(index:int):
     video = getVideo(index)
     html = get(video.href).text
     soup = bs(html, 'html.parser')
