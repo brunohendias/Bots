@@ -27,7 +27,10 @@ def getData(link:str):
             obj.href = basepath + a.attrs['href']
             img = li.find('img')
             obj.thumb = img.attrs['data-src']
-            obj.link = img.attrs['data-mediabook']
+            try:
+                obj.link = img.attrs['data-mediabook']
+            except:
+                pass
             cache.writeline(obj)
 
 def run():

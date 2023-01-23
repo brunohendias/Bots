@@ -16,9 +16,13 @@ def video(index, name):
 
 def sites():
     return KM([
-        [ KB('xvideos', '1_xvid'),
-            KB('redtube', '1_red'),
-            KB('pornhub', '1_hub')]
+        [ 
+            KB('XVideos', '1_xvid'),
+            KB('RedTube', '1_red')
+        ],[ 
+            KB('PornHub', '1_hub'),
+            KB('Brasileirinhas', '1_brasa')
+        ]
     ])
 
 async def start(msg, name):
