@@ -9,6 +9,8 @@ def run():
 
 def search(term: str):
     xvid.search(term)
+    red.search(term)
+    hub.search(term)
 
 def download(link: str):
     content = get(link).content
