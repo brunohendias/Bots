@@ -15,4 +15,6 @@ def test_if_clear_contents_folder():
 	with open(file_, 'wt') as f:
 		f.write('teste')
 	tools.clear()
+	with open('./Contents/nocontent', 'wt') as f:
+		f.write('nothing')
 	assert not path.exists(file_)
