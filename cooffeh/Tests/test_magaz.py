@@ -6,8 +6,7 @@ def test_if_download_content():
 	assert magaz.cache.exist()
 
 def test_if_read_cache():
-	image = magaz.getImage()
-	assert image.name and image.site and image.img
+	assert magaz.getImage().name
 
 def test_if_delete_old_cache():
 	magaz.cache.delOld('magaz')

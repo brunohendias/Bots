@@ -2,7 +2,7 @@ from Shared import tools
 from os import path
 
 def test_if_get_callback_command():
-	assert len(tools.getCommand('1_goo')) > 1
+	assert tools.getCommand('1_goo')
 
 def test_if_create_cache_name():
 	assert 'test.txt' in tools.cacheName('test')

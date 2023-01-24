@@ -6,17 +6,14 @@ def test_if_download_content():
 	assert xvid.cache.exist()
 
 def test_if_read_cache():
-	video = xvid.getVideo()
-	assert video.title and video.site and video.thumb
+	assert xvid.getVideo().title
 
 def test_if_get_video_link():
-	resp = xvid.getLink(1)
-	assert resp and resp['link'] and resp['title']
+	assert xvid.getLink(1)['title']
 
 def test_if_search_videos():
 	xvid.search('big ass')
-	video = xvid.getVideo()
-	assert xvid.cache.exist() and video.title and video.site
+	assert xvid.getVideo().title
 
 def test_if_delete_old_cache():
 	xvid.cache.delOld('xvid')

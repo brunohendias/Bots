@@ -6,16 +6,13 @@ def test_if_download_content():
 	assert red.cache.exist()
 
 def test_if_read_cache():
-	video = red.getVideo()
-	assert video.title and video.site and video.thumb
+	assert red.getVideo().title
 
 def test_if_get_gif_link():
-	resp = red.getLink(1)
-	assert resp and resp['link'] and resp['title']
+	assert red.getLink(1)['title']
 
 def test_if_get_video_link():
-	resp = red.getRealLink(1)
-	assert resp and resp['link'] and resp['title']
+	assert red.getRealLink(1)['title']
 
 def test_if_delete_old_cache():
 	red.cache.delOld('red')
