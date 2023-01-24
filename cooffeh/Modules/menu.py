@@ -1,4 +1,4 @@
-from Modules import qrcode, youtube, instagram, adult
+from Modules import qrcode, youtube, instagram, adult, stream
 from Modules.Adult import magaz, goo
 from importlib import import_module as adt
 from Models.Command import Command
@@ -36,6 +36,10 @@ class Commands:
         Thread(target=magaz.run).start()
         return await reply.start(msg, '1_magaz')
 
+    async def showStream(msg):
+        Thread(target=stream.run).start()
+        return await reply.start(msg, '1_flix')
+
     async def searchGoogleImages(msg):
         goo.run(msg.text.lower().replace('search ', ''))
         return await reply.start(msg, '1_goo')
@@ -61,6 +65,7 @@ class Commands:
         Command('qrcode', generateQRCode),
         Command('adult', showAdult),
         Command('magazine', showMagazine),
+        Command('stream', showStream),
         Command('search', searchGoogleImages),
         Command('xsearch', searchAdult),
         Command('cleard', clearContents),
@@ -74,6 +79,17 @@ class Callbacks:
         return await msg.edit_message_text(
             'Choose One Site',
             reply_markup=reply.sites())
+
+    async def showStreams(msg, index, com):
+        return await msg.edit_message_text(
+            'Choose One Site',
+            reply_markup=reply.streams())
+
+    async def preparStream(msg, index, com):
+        obj = adt('Modules.Stream.'+com).getVideo(index)
+        return await msg.edit_message_text(
+            message.video(obj),
+            reply_markup=reply.stream(index, com))
 
     async def preparVideo(msg, index, com):
         obj = adt('Modules.Adult.'+com).getVideo(index)
@@ -96,12 +112,15 @@ class Callbacks:
 
     menu = [
         Command('sites', showSites),
+        Command('streams', showStreams),
         Command('xvid', preparVideo),
         Command('hub', preparVideo),
         Command('red', preparVideo),
         Command('brasa', preparVideo),
         Command('magaz', preparImage),
         Command('goo', preparImage),
+        Command('flix', preparStream),
+        Command('prime', preparStream),
         Command('downloadxvid', download),
         Command('downloadred', download),
         Command('downloadhub', download)

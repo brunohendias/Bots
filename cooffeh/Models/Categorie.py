@@ -1,0 +1,3 @@
+class Categorie:
+	name = ''
+	href = ''
