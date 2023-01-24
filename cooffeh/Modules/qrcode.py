@@ -1,10 +1,8 @@
 from qrcode import QRCode
 
 def write(text):
-    qr = QRCode(box_size=5, border=2)
+    qr = QRCode(box_size=4, border=2)
     qr.add_data(text)
-    qr.make(fit=True)
-    img = qr.make_image(fill='black', back_color='white')
+    img = qr.make_image()
     file_ = './Contents/qrcode.jpg'
-    img.save(file_)
-    return file_
+    return '' if img.save(file_) else file_

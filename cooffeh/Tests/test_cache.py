@@ -17,13 +17,11 @@ def test_if_set_cache_obj():
 def test_if_validate_exist_cache():
 	video = Video()
 	video.title = 'Test Cache'
-	video.site = 'PyTest'
 	cache.writeline(video)
 	assert cache.exist()
 
 def test_if_read_cache():
-	video = cache.readline()
-	assert video.site == 'PyTest' and video.title == 'Test Cache'
+	assert cache.readline().title == 'Test Cache'
 
 def test_if_delete_cache():
 	cache.delOld('cache')

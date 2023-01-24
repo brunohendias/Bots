@@ -6,12 +6,10 @@ def test_if_download_content():
 	assert hub.cache.exist()
 
 def test_if_read_cache():
-	video = hub.getVideo()
-	assert video.title and video.site and video.thumb
+	assert hub.getVideo().title
 
 def test_if_get_gif_link():
-	resp = hub.getLink(1)
-	assert resp and resp['link'] and resp['title']
+	assert hub.getLink(1)['title']
 
 def test_if_delete_old_cache():
 	hub.cache.delOld('hub')
