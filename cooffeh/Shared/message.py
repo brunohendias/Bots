@@ -19,6 +19,8 @@ Welcome to the bot world
 With me you can:
 - Download Youtube video 
     sending the link
+- Download Youtube audio 
+    sending "audio ..."
 - Download Instagram image post 
     sending the link
 - Generate long and strong random password 

@@ -29,6 +29,16 @@ async def sendPhoto(msg, file_):
     await msg.reply('Finished with success! Sending...')
     return await app.send_photo(msg.chat.id, file_)
 
+async def sendAudio(msg, audio):
+    chat = msg.from_user.id
+    if audio.file_:
+        await app.send_message(chat, f'[Thumb]({audio.thumb})\nFinished with success! Sending...')
+        return await app.send_audio(chat, audio.file_, 
+            title=audio.title,
+            performer=audio.author,
+            duration=audio.duration)
+    return await app.send_message(chat, 'Not Found!')
+
 async def sendVideo(msg, file_, caption):
     chat = msg.from_user.id
     if not file_:

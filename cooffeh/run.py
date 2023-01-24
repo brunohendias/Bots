@@ -22,7 +22,10 @@ async def main(cliente, msg):
     try:
         lower = msg.text.lower()
         if "youtu.be" in lower or "www.youtube.com" in lower:
-            lower = 'youtube'
+            if "audio" in lower:
+                lower = 'audio'
+            else:
+                lower = 'youtube'
         elif "instagram.com" in lower and 'scontent.cdninsta' not in lower:
             lower = 'instagram'
         elif 'qrcode' in lower:

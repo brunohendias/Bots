@@ -20,8 +20,13 @@ class Commands:
 
     async def downloadYoutubeVideo(msg):
         return await tools.sendVideo(msg,
-            youtube.download(msg.text),
+            youtube.getVideo(msg.text),
             'Youtube video')
+
+    async def downloadYoutubeAudio(msg):
+        text = msg.text.split(' ')[1]
+        return await tools.sendAudio(msg,
+            youtube.getAudio(text))
     
     async def showAdult(msg):
         Thread(target=adult.run).start()
@@ -50,6 +55,7 @@ class Commands:
 
     menu = [
         Command('password', randomPassword),
+        Command('audio', downloadYoutubeAudio),
         Command('youtube', downloadYoutubeVideo),
         Command('instagram', downloadInstagramImagePost),
         Command('qrcode', generateQRCode),
