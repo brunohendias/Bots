@@ -1,5 +1,3 @@
-from requests import get
-from bs4 import BeautifulSoup as bs
 from json import loads, dumps
 from Modules.cache import Cache
 from Models.Image import Image
@@ -23,6 +21,5 @@ def getImages(soup):
 def run():
     basepath = 'https://www.erome.com/explore/new'
     for page in range(5):
-        html = get(basepath + f'?page={page+1}').text
-        soup = bs(html, 'html.parser')
-        getImages(soup)
+        next_ = f'?page={page+1}'
+        getImages(tools.getSoup(basepath + next_))

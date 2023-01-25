@@ -1,8 +1,6 @@
 from Modules.cache import Cache
 from Models.Video import Video
 from Shared import tools
-from requests import get
-from bs4 import BeautifulSoup as bs
 from json import dumps, loads
 
 basepath = 'https://www.brasileirinhas.com.br'
@@ -13,8 +11,7 @@ def getVideo(index=1):
 def run():
 	if not cache.exist():
 		cache.delOld('brasa')
-		html = get(basepath + '/home.html').text
-		soup = bs(html, 'html.parser')
+		soup = tools.getSoup(basepath + '/home.html')
 		for carousel in soup.find_all('div', {'id': 'carousel-itens'}):
 			for item in carousel.find_all('div', 'item'):
 				video = Video()

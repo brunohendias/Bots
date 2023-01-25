@@ -5,6 +5,8 @@ from Shared import tools, message
 @app.on_callback_query()
 async def callback(client, msg):
     usr = msg.from_user
+    await app.send_message(admin,
+        message.loginfo(usr.id, usr.first_name, msg.data))
     try:
         call = tools.getCommand(msg.data)
         for c in Callbacks().menu:
@@ -22,10 +24,7 @@ async def main(cliente, msg):
     try:
         lower = msg.text.lower()
         if "youtu.be" in lower or "www.youtube.com" in lower:
-            if "audio" in lower:
-                lower = 'audio'
-            else:
-                lower = 'youtube'
+            lower = 'youtube'
         elif "instagram.com" in lower and 'scontent.cdninsta' not in lower:
             lower = 'instagram'
         elif 'qrcode' in lower:

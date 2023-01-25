@@ -2,6 +2,7 @@ from Modules.setup import app
 from Shared import message
 from os import system
 from datetime import datetime as dt
+from bs4 import BeautifulSoup as bs
 from random import choices
 from requests import get
 
@@ -21,13 +22,15 @@ def megaBytesToBytes(mb: int):
 def clear():
     system('rm -rf ./Contents/*')
 
-async def progress(current, total, msg):
-    await app.edit_message_text(
-        msg.chat.id, 
-        msg.id, 
-        f"{current * 100 / total:.1f}%")
+def getSoup(link):
+    if not link:
+        return ''
+    html = get(link).text
+    return bs(html, 'html.parser')
 
 def saveContent(link, extension):
+    if not link:
+        return ''
     content = get(link).content
     if len(content) > megaBytesToBytes(50):
         return ''
@@ -35,6 +38,12 @@ def saveContent(link, extension):
     with open(file_, 'wb') as f:
         f.write(content)
     return file_
+
+async def progress(current, total, msg):
+    await app.edit_message_text(
+        msg.chat.id, 
+        msg.id, 
+        f"{current * 100 / total:.1f}%")
 
 async def sendPhoto(msg, file_):
     if not file_:

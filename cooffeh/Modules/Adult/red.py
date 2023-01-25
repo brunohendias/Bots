@@ -1,8 +1,6 @@
 from Modules.cache import Cache
 from Models.Video import Video
 from Shared import tools
-from bs4 import BeautifulSoup as bs
-from requests import get
 from json import loads
 
 basepath = 'https://www.redtube.com'
@@ -11,8 +9,7 @@ def getVideo(index=1):
     return cache.readline(index)
 
 def getData(link:str):
-    html = get(link).text
-    soup = bs(html, 'html.parser')
+    soup = tools.getSoup(link)
     for li in soup.find_all('li'):
         div = li.find('div', 'video_title')
         if div:
@@ -52,13 +49,12 @@ def search(term:str):
 
 def getRealLink(index:int):
     video = getVideo(index)
-    html = get(video.href).text
-    soup = bs(html, 'html.parser')
+    soup = tools.getSoup(video.href)
     script = soup.find('script', { 'id': 'tm_pc_player_setup'}).text
     values = script.replace('\\', '')
     for value in values.split(','):
         if 'media/mp4' in value:
             media = value.split('"')[3]
-            json = get(media).text
+            json = tools.get(media).text
             qualitys = loads(json)
             return {'link': qualitys[0]['videoUrl'], 'title': video.title}

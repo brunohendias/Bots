@@ -2,8 +2,6 @@ from Modules.cache import Cache
 from Models.Image import Image
 from Modules.Adult import erome
 from Shared import tools
-from bs4 import BeautifulSoup as bs
-from requests import get
 
 cache = Cache(Image, tools.cacheName('magaz'))
 def getImage(index=1):
@@ -26,10 +24,8 @@ def run():
         cache.delOld('magaz')
         erome.run()
         basepath = 'https://www.playboytv.com'
-        html = get(basepath).text
-        soup = bs(html, 'html.parser')
+        soup = tools.getSoup(basepath)
         getImages(basepath, soup.find('ul', 'swiper-wrapper'))
         basepath = 'https://www.playboytv.com/models'
-        html = get(basepath).text
-        soup = bs(html, 'html.parser')
+        soup = tools.getSoup(basepath)
         getImages(basepath, soup.find('ul', 'grid gridFive list-unstyled'))

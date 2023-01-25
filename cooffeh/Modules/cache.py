@@ -21,7 +21,7 @@ class Cache:
 
     def readline(self, index=1):
         load = self.obj()
-        load.__dict__ = loads(getline(self.path, index) or getline(self.path, 1))
+        load.__dict__ = loads(getline(self.path, index) or '{}')
         return load
 
     def writeline(self, obj):

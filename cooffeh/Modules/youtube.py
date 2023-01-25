@@ -1,6 +1,11 @@
-from pytube import YouTube
 from Models.Audio import Audio
 from Shared import tools
+from pytube import YouTube
+
+def text(link):
+    soup = tools.getSoup(link)
+    title = soup.find('title').text
+    return f'Choose the option to download\n{title}'
 
 def getVideo(text):
     streams = YouTube(text).streams

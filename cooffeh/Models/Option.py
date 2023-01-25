@@ -1,0 +1,3 @@
+class Option:
+    chat = ''
+    text = ''

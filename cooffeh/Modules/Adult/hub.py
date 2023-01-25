@@ -1,8 +1,6 @@
 from Modules.cache import Cache
 from Models.Video import Video
 from Shared import tools
-from bs4 import BeautifulSoup as bs
-from requests import get
 
 basepath = 'https://pt.pornhub.com'
 cache = Cache(Video, tools.cacheName('hub'))
@@ -10,8 +8,7 @@ def getVideo(index=1):
     return cache.readline(index)
 
 def getData(link:str):
-    html = get(link).text
-    soup = bs(html, 'html.parser')
+    soup = tools.getSoup(link)
     tags = soup.find_all('li', 'pcVideoListItem')
     for tag in tags:
         a = tag.find('a')

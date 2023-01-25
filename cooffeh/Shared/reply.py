@@ -45,3 +45,11 @@ async def start(msg, name):
     return await msg.reply(
         text='Lets show!!', 
         reply_markup=KM([[ KB('start', name) ]]))
+
+async def option(msg, id_, text):
+    return await msg.reply(
+        text=text, 
+        reply_markup=KM([[ 
+            KB('Audio', f'{id_}_audio'),
+            KB('Video', f'{id_}_video')
+        ]]))
