@@ -14,6 +14,14 @@ def video(index, name):
             KB('Other site', '1_sites')],
     ])
 
+def stream(index, name):
+    return KM([
+        [ KB('<',f"{index-1}_{name}"),
+            KB('>',f"{index+1}_{name}")],
+        [ KB('Download',f"{index}_download{name}"),
+            KB('Other site', '1_streams')],
+    ])
+
 def sites():
     return KM([
         [ 
@@ -22,6 +30,14 @@ def sites():
         ],[ 
             KB('PornHub', '1_hub'),
             KB('Brasileirinhas', '1_brasa')
+        ]
+    ])
+
+def streams():
+    return KM([
+        [ 
+            KB('Netflix', '1_flix'),
+            KB('PrimeVideo', '1_prime')
         ]
     ])
 
