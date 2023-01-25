@@ -8,7 +8,8 @@ from threading import Thread
 class Commands:
     
     async def randomPassword(msg):
-        return await msg.reply(tools.token_urlsafe(40))
+        from secrets import token_urlsafe as token
+        return await msg.reply(token(30))
 
     async def generateQRCode(msg):
         return await tools.sendPhoto(msg,
