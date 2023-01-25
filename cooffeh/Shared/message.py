@@ -17,10 +17,8 @@ def logerr(id_, user, err, text):
 introduce = """
 Welcome to the bot world
 With me you can:
-- Download Youtube video 
+- Download Youtube video/audio 
     sending the link
-- Download Youtube audio 
-    sending "audio ..."
 - Download Instagram image post 
     sending the link
 - Generate long and strong random password 

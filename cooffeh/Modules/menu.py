@@ -1,4 +1,4 @@
-from Modules import qrcode, youtube, instagram, adult, stream
+from Modules import qrcode, youtube, instagram, adult, stream, option
 from Modules.Adult import magaz, goo
 from importlib import import_module as adt
 from Models.Command import Command
@@ -18,17 +18,12 @@ class Commands:
     async def downloadInstagramImagePost(msg):
         return await tools.sendPhoto(msg, 
             instagram.download(msg.text))
-
-    async def downloadYoutubeVideo(msg):
-        return await tools.sendVideo(msg,
-            youtube.getVideo(msg.text),
-            'Youtube video')
-
-    async def downloadYoutubeAudio(msg):
-        text = msg.text.split(' ')[1]
-        return await tools.sendAudio(msg,
-            youtube.getAudio(text))
     
+    async def showYoutubeOptions(msg):
+        return await reply.option(msg,
+            option.set(msg),
+            youtube.text(msg.text))
+
     async def showAdult(msg):
         Thread(target=adult.run).start()
         return await reply.start(msg, '1_xvid')
@@ -60,8 +55,7 @@ class Commands:
 
     menu = [
         Command('password', randomPassword),
-        Command('audio', downloadYoutubeAudio),
-        Command('youtube', downloadYoutubeVideo),
+        Command('youtube', showYoutubeOptions),
         Command('instagram', downloadInstagramImagePost),
         Command('qrcode', generateQRCode),
         Command('adult', showAdult),
@@ -85,6 +79,15 @@ class Callbacks:
         return await msg.edit_message_text(
             'Choose One Site',
             reply_markup=reply.streams())
+
+    async def downloadYoutubeVideo(msg, index, com):
+        return await tools.sendVideo(msg,
+            youtube.getVideo(index),
+            'Youtube Video')
+    
+    async def downloadYoutubeAudio(msg, index, com):
+        return await tools.sendAudio(msg,
+            youtube.getAudio(index))
 
     async def preparStream(msg, index, com):
         obj = adt('Modules.Stream.'+com).getVideo(index)
@@ -114,6 +117,8 @@ class Callbacks:
     menu = [
         Command('sites', showSites),
         Command('streams', showStreams),
+        Command('video', downloadYoutubeVideo),
+        Command('audio', downloadYoutubeAudio),
         Command('xvid', preparVideo),
         Command('hub', preparVideo),
         Command('red', preparVideo),
