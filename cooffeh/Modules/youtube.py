@@ -1,4 +1,3 @@
-from Modules import option
 from Models.Audio import Audio
 from Shared import tools
 from pytube import YouTube
@@ -8,16 +7,14 @@ def text(link):
     title = soup.find('title').text
     return f'Choose the option to download\n{title}'
 
-def getVideo(index):
-    msg = option.get(index)
-    streams = YouTube(msg.text).streams
+def getVideo(text):
+    streams = YouTube(text).streams
     mp4 = streams.order_by('resolution').filter(
         file_extension='mp4', progressive="True")
     return mp4.last().download('Contents',f'{tools.fileName()}.mp4')
 
-def getAudio(index):
-    msg = option.get(index)
-    yt = YouTube(msg.text)
+def getAudio(text):
+    yt = YouTube(text)
     audio = Audio()
     audio.title = yt.title
     audio.author = yt.author

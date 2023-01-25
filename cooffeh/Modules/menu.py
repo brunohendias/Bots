@@ -81,13 +81,15 @@ class Callbacks:
             reply_markup=reply.streams())
 
     async def downloadYoutubeVideo(msg, index, com):
+        opt = option.get(index)
         return await tools.sendVideo(msg,
-            youtube.getVideo(index),
+            youtube.getVideo(opt.text),
             'Youtube Video')
     
     async def downloadYoutubeAudio(msg, index, com):
+        opt = option.get(index)
         return await tools.sendAudio(msg,
-            youtube.getAudio(index))
+            youtube.getAudio(opt.text))
 
     async def preparStream(msg, index, com):
         obj = adt('Modules.Stream.'+com).getVideo(index)

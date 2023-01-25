@@ -7,4 +7,4 @@ def test_if_download_youtube_video():
 
 def test_if_download_youtube_audio():
 	text = 'https://youtu.be/vVXIK1xCRpY'
-	assert path.exists(youtube.getVideo(text))
+	assert path.exists(youtube.getAudio(text).file_)
