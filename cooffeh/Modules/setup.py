@@ -3,7 +3,7 @@ from dotenv import load_dotenv
 from pyrogram import Client
 
 load_dotenv()
-admin = getenv('TELEGRAM_ADMIN_ID')
+admin = int(getenv('TELEGRAM_ADMIN_ID'))
 app = Client(
     getenv('TELEGRAM_API_BOTNAME'),
     api_id=getenv('TELEGRAM_API_ID'),

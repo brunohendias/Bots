@@ -1,12 +1,10 @@
-from Modules.menu import Callbacks, Commands
+from Modules.menu import Callbacks, Commands, Own
 from Modules.setup import app, admin
 from Shared import tools, message
 
 @app.on_callback_query()
 async def callback(client, msg):
     usr = msg.from_user
-    await app.send_message(admin,
-        message.loginfo(usr.id, usr.first_name, msg.data))
     try:
         call = tools.getCommand(msg.data)
         for c in Callbacks().menu:
@@ -38,9 +36,14 @@ async def main(cliente, msg):
             if commmand.command == lower:
                 await msg.reply(message.process)
                 return await commmand.action(msg)
+
+        if usr.id == admin:
+            for commmand in Own().menu:
+                if commmand.command == lower:
+                    await msg.reply(message.process)
+                    return await commmand.action(msg)
+
     except Exception as err:
         return await app.send_message(admin,
             message.logerr(usr.id, usr.first_name, err, msg.text))
-
-print('Running...')
 app.run()

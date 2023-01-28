@@ -3,7 +3,6 @@ from Modules.Adult import magaz, goo
 from importlib import import_module as adt
 from Models.Command import Command
 from Shared import message, tools, reply
-from threading import Thread
 
 class Commands:
     
@@ -24,31 +23,13 @@ class Commands:
             option.set(msg),
             youtube.text(msg.text))
 
-    async def showAdult(msg):
-        Thread(target=adult.run).start()
-        return await reply.start(msg, '1_xvid')
-
-    async def showMagazine(msg):
-        Thread(target=magaz.run).start()
-        return await reply.start(msg, '1_magaz')
-
     async def showStream(msg):
-        Thread(target=stream.run).start()
+        tools.backgroundTask(stream.run)
         return await reply.start(msg, '1_flix')
 
     async def searchGoogleImages(msg):
         goo.run(msg.text.lower().replace('search ', ''))
         return await reply.start(msg, '1_goo')
-
-    async def searchAdult(msg):
-        term = msg.text.lower().replace(
-            'xsearch ', '').replace(' ', '+')
-        Thread(target=adult.search, args=[term]).start()
-        return await reply.start(msg, '1_xvid')
-
-    async def clearContents(msg):
-        tools.clear()
-        return await msg.reply('Done')
 
     async def introduce(msg):
         return await msg.reply(message.introduce)
@@ -58,12 +39,8 @@ class Commands:
         Command('youtube', showYoutubeOptions),
         Command('instagram', downloadInstagramImagePost),
         Command('qrcode', generateQRCode),
-        Command('adult', showAdult),
-        Command('magazine', showMagazine),
         Command('stream', showStream),
         Command('search', searchGoogleImages),
-        Command('xsearch', searchAdult),
-        Command('cleard', clearContents),
         Command('/start', introduce),
         Command('help', introduce)
     ]
@@ -132,4 +109,31 @@ class Callbacks:
         Command('downloadxvid', download),
         Command('downloadred', download),
         Command('downloadhub', download)
+    ]
+
+class Own:
+
+    async def searchAdult(msg):
+        term = msg.text.lower().replace(
+            'xsearch ', '').replace(' ', '+')
+        tools.backgroundTask(adult.search, [term])
+        return await reply.start(msg, '1_xvid')
+
+    async def clearContents(msg):
+        tools.clear()
+        return await msg.reply('Done')
+
+    async def showAdult(msg):
+        tools.backgroundTask(adult.run)
+        return await reply.start(msg, '1_xvid')
+
+    async def showMagazine(msg):
+        tools.backgroundTask(magaz.run)
+        return await reply.start(msg, '1_magaz')
+
+    menu = [
+        Command('adult', showAdult),
+        Command('magazine', showMagazine),
+        Command('xsearch', searchAdult),
+        Command('cleard', clearContents)
     ]

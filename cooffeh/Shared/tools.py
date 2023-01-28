@@ -5,6 +5,8 @@ from datetime import datetime as dt
 from bs4 import BeautifulSoup as bs
 from random import choices
 from requests import get
+from threading import Thread
+from time import sleep
 
 def getCommand(data):
     return data.split('_')
@@ -17,7 +19,7 @@ def cacheName(name):
     return f"{now.day}{'AM' if now.hour < 12 else 'PM'}{name}.txt"
 
 def megaBytesToBytes(mb: int):
-    return mb * 1000000
+    return mb * 1048576
 
 def clear():
     system('rm -rf ./Contents/*')
@@ -27,6 +29,10 @@ def getSoup(link):
         return ''
     html = get(link).text
     return bs(html, 'html.parser')
+
+def backgroundTask(action, args=[]):
+    Thread(target=action, args=args).start()
+    return sleep(0.5)
 
 def saveContent(link, extension):
     if not link:
