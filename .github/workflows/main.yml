@@ -21,10 +21,12 @@ jobs:
         run: |
           echo "${{ secrets.ENV_FILE_COOFFEH }}" > whiskyh/.env
           echo "${{ secrets.ENV_FILE_WHISKYH }}" > cooffeh/.env
-          ls
-          rm -rf Tests git* .git* /tmp/*.tar.gz
-          rm devreqs.txt .env.example Dockerfile docker-compose.yml
-          ls
+          cd cooffeh
+          rm -rf Tests git* .git* \
+              devreqs.txt .env.example \
+              Dockerfile docker-compose.yml \
+              /tmp/*.tar.gz
+          cd ..
           touch "${GITHUB_SHA}".tar.gz
           tar -czf "${GITHUB_SHA}".tar.gz --exclude="${GITHUB_SHA}".tar.gz .
       - name: Storing artifact
