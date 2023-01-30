@@ -58,6 +58,7 @@ jobs:
             rm -rf /home/bots
             mkdir /home/bots
             tar -xzf /tmp/${{ github.sha }}.tar.gz -C /home/bots
+            cd /home/bots/cooffeh
             python3.11 -m venv venv
             source venv/bin/activate
             pip install -r reqs.txt
