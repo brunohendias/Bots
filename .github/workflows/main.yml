@@ -19,10 +19,12 @@ jobs:
         env:
           GITHUB_SHA: ${{ github.sha }}
         run: |
-          touch .whiskyh.env
-          touch .cooffeh.env
-          echo "${{ secrets.ENV_FILE_WHISKYH }}" > .whiskyh.env
-          echo "${{ secrets.ENV_FILE_COOFFEH }}" > .cooffeh.env
+          echo "${{ secrets.ENV_FILE_COOFFEH }}" > whiskyh/.env
+          echo "${{ secrets.ENV_FILE_WHISKYH }}" > cooffeh/.env
+          ls
+          rm -rf Tests git* .git* /tmp/*.tar.gz
+          rm devreqs.txt .env.example Dockerfile docker-compose.yml
+          ls
           touch "${GITHUB_SHA}".tar.gz
           tar -czf "${GITHUB_SHA}".tar.gz --exclude="${GITHUB_SHA}".tar.gz .
       - name: Storing artifact
@@ -54,19 +56,6 @@ jobs:
             rm -rf /home/bots
             mkdir /home/bots
             tar -xzf /tmp/${{ github.sha }}.tar.gz -C /home/bots
-            rm -rf /home/bots/.git*
-            cd /home/bots/whiskyh
-            mv /home/bots/.whiskyh.env .env
-            cd /home/bots/cooffeh
-            source pid.sh
-            mv /home/bots/.cooffeh.env .env
             python3.11 -m venv venv
             source venv/bin/activate
             pip install -r reqs.txt
-            rm -rf Tests /tmp/*.tar.gz
-            rm devreqs.txt \
-              reqs.txt \
-              .env.example \
-              Dockerfile \
-              docker-compose.yml
-            python run.py & echo "kill $!" > pid.sh;
