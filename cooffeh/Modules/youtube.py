@@ -2,8 +2,8 @@ from Models.Audio import Audio
 from Shared import tools
 from pytube import YouTube
 
-def text(link):
-    soup = tools.getSoup(link)
+async def text(link):
+    soup = await tools.getSoup(link)
     title = soup.find('title').text
     return f'Choose the option to download\n{title}'
 

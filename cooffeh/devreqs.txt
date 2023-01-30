@@ -9,4 +9,5 @@ qrcode
 scrapingant-client
 jurigged
 pytest
+pytest-asyncio
 

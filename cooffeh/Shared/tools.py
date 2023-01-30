@@ -24,17 +24,17 @@ def megaBytesToBytes(mb: int):
 def clear():
     system('rm -rf ./Contents/*')
 
-def getSoup(link):
+def backgroundTask(action, args=[]):
+    Thread(target=action, args=args).start()
+    return sleep(0.5)
+
+async def getSoup(link):
     if not link:
         return ''
     html = get(link).text
     return bs(html, 'html.parser')
 
-def backgroundTask(action, args=[]):
-    Thread(target=action, args=args).start()
-    return sleep(0.5)
-
-def saveContent(link, extension):
+async def saveContent(link, extension):
     if not link:
         return ''
     content = get(link).content

@@ -1,15 +1,21 @@
 from Modules.Adult import hub
+from pytest import mark
 
-def test_if_download_content():
+@mark.asyncio
+async def test_if_download_content():
 	hub.cache.delOld('hub')
-	hub.run()
+	await hub.run()
 	assert hub.cache.exist()
 
-def test_if_read_cache():
-	assert hub.getVideo().title
+@mark.asyncio
+async def test_if_read_cache():
+	video = await hub.getVideo()
+	assert video.title
 
-def test_if_get_gif_link():
-	assert hub.getLink(1)['title']
+@mark.asyncio
+async def test_if_get_gif_link():
+	video = await hub.getLink(1)
+	assert video['title']
 
 def test_if_delete_old_cache():
 	hub.cache.delOld('hub')

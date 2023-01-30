@@ -58,6 +58,7 @@ jobs:
             cd /home/bots/whiskyh
             mv /home/bots/.whiskyh.env .env
             cd /home/bots/cooffeh
+            source pid.sh
             mv /home/bots/.cooffeh.env .env
             python3.11 -m venv venv
             source venv/bin/activate
@@ -68,3 +69,4 @@ jobs:
               .env.example \
               Dockerfile \
               docker-compose.yml
+            python run.py & echo "kill $!" > pid.sh;

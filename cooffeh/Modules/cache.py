@@ -19,11 +19,11 @@ class Cache:
         system(f'rm -rf ./Contents/*{name}.txt')
         return clearcache()
 
-    def readline(self, index=1):
+    async def readline(self, index=1):
         load = self.obj()
         load.__dict__ = loads(getline(self.path, index) or '{}')
         return load
 
-    def writeline(self, obj):
+    async def writeline(self, obj):
         with open(self.path, 'at+') as f:
             f.write(dumps(obj.__dict__) + '\n')

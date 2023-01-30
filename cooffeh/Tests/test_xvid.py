@@ -1,19 +1,27 @@
 from Modules.Adult import xvid
+from pytest import mark
 
-def test_if_download_content():
+@mark.asyncio
+async def test_if_download_content():
 	xvid.cache.delOld('xvid')
-	xvid.run()
+	await xvid.run()
 	assert xvid.cache.exist()
 
-def test_if_read_cache():
-	assert xvid.getVideo().title
+@mark.asyncio
+async def test_if_read_cache():
+	video = await xvid.getVideo()
+	assert video.title
 
-def test_if_get_video_link():
-	assert xvid.getLink(1)['title']
+@mark.asyncio
+async def test_if_get_video_link():
+	video = await xvid.getLink(1)
+	assert video['title']
 
-def test_if_search_videos():
-	xvid.search('big ass')
-	assert xvid.getVideo().title
+@mark.asyncio
+async def test_if_search_videos():
+	await xvid.search('big ass')
+	video = await xvid.getVideo()
+	assert video.title
 
 def test_if_delete_old_cache():
 	xvid.cache.delOld('xvid')
