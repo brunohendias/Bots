@@ -1,5 +1,9 @@
 from Modules.Stream import prime, flix
+import asyncio
+
+async def runAsync():
+	await prime.run()
+	await flix.run()
 
 def run():
-	prime.run()
-	flix.run()
+	asyncio.run(runAsync())

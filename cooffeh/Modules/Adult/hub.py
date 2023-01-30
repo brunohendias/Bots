@@ -4,13 +4,12 @@ from Shared import tools
 
 basepath = 'https://pt.pornhub.com'
 cache = Cache(Video, tools.cacheName('hub'))
-def getVideo(index=1):
-    return cache.readline(index)
+async def getVideo(index=1):
+    return await cache.readline(index)
 
-def getData(link:str):
-    soup = tools.getSoup(link)
-    tags = soup.find_all('li', 'pcVideoListItem')
-    for tag in tags:
+async def getData(link:str):
+    soup = await tools.getSoup(link)
+    for tag in soup.find_all('li', 'pcVideoListItem'):
         a = tag.find('a')
         if a:
             obj = Video()
@@ -18,26 +17,24 @@ def getData(link:str):
             obj.title = a.attrs['title']
             obj.href = basepath + a.attrs['href']
             obj.thumb = a.find('img').attrs['src']
-            img = tag.find('img')
-            try:
+            img = tag.find('img', {'data-mediabook': True})
+            if img:
                 obj.link = img.attrs['data-mediabook']
-            except:
-                pass
-            cache.writeline(obj)
+                await cache.writeline(obj)
 
-def run():
+async def run():
     if not cache.exist():
         cache.delOld('hub')
-        getData(basepath)
+        await getData(basepath)
         for page in ['2', '3']:
-            getData(basepath + '/video?page=' + page)
+            await getData(basepath + '/video?page=' + page)
 
-def getLink(index:int):
-    video = getVideo(index)
+async def getLink(index:int):
+    video = await getVideo(index)
     return {'link': video.link, 'title': video.title}
 
-def search(term:str):
+async def search(term:str):
     cache.delOld('hub')
-    getData(basepath + f'/video/search?search={term}')
+    await getData(basepath + f'/video/search?search={term}')
     for page in ['2', '3']:
-        getData(basepath + f'/video/search?search={term}&page=' + page)
+        await getData(basepath + f'/video/search?search={term}&page=' + page)

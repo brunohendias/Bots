@@ -2,17 +2,15 @@ from Modules.cache import Cache
 from Models.Video import Video
 from Models.Categorie import Categorie
 from Shared import tools
-from bs4 import BeautifulSoup as bs
-from requests import get
 
 cache = Cache(Video, tools.cacheName('prime'))
-def getVideo(index=1):
-	return cache.readline(index)
+async def getVideo(index=1):
+	return await cache.readline(index)
 
-def getMovies():
+async def getMovies():
 	basepath = 'https://www.primevideo.com'
-	html = get(basepath + '/storefront/ref=atv_br_Comedy_c_9zZ8D2_1_2?merchId=RentBuy').text
-	soup = bs(html, 'html.parser')
+	soup = await tools.getSoup(
+		basepath + '/storefront/ref=atv_br_Comedy_c_9zZ8D2_1_2?merchId=RentBuy')
 	for collection in soup.find_all('div', 'tst-collection'):
 		for li in collection.find_all('li'):
 			video = Video()
@@ -27,7 +25,7 @@ def getMovies():
 			img = li.find('img')
 			if img:
 				video.thumb = img.attrs['src']
-				cache.writeline(video)
+				await cache.writeline(video)
 
 	hero = soup.find('ul', 'tst-superhero-item')
 	for li in hero.find_all('li'):
@@ -41,12 +39,12 @@ def getMovies():
 		if img:
 			video.thumb = img.attrs['src']
 		video.categorie = 'carousel'
-		cache.writeline(video)
+		await cache.writeline(video)
 
-def run():
-	getMovies()
+async def run():
+	await getMovies()
 
-def getCategories():
+def getCategories(soup, basepath):
 	categories = []
 	dropdown = soup.find('ul', 'pv-categories-dropdown')
 	for li in dropdown.find_all('li'):

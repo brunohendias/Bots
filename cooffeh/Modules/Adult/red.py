@@ -5,11 +5,11 @@ from json import loads
 
 basepath = 'https://www.redtube.com'
 cache = Cache(Video, tools.cacheName('red'))
-def getVideo(index=1):
-    return cache.readline(index)
+async def getVideo(index=1):
+    return await cache.readline(index)
 
-def getData(link:str):
-    soup = tools.getSoup(link)
+async def getData(link:str):
+    soup = await tools.getSoup(link)
     for li in soup.find_all('li'):
         div = li.find('div', 'video_title')
         if div:
@@ -28,28 +28,28 @@ def getData(link:str):
                 obj.link = img.attrs['data-mediabook']
             except:
                 pass
-            cache.writeline(obj)
+            await cache.writeline(obj)
 
-def run():
+async def run():
     if not cache.exist():
         cache.delOld('red')
-        getData(basepath)
+        await getData(basepath)
         for page in ['2', '3']:
-            getData(basepath + '/?page=' + page)
+            await getData(basepath + '/?page=' + page)
 
-def getLink(index:int):
-    video = getVideo(index)
+async def getLink(index:int):
+    video = await getVideo(index)
     return {'link': video.link, 'title': video.title}
 
-def search(term:str):
+async def search(term:str):
     cache.delOld('red')
-    getData(basepath + f'/?search={term}')
+    await getData(basepath + f'/?search={term}')
     for page in ['2', '3']:
-        getData(basepath + f'/?search={term}&page=' + page)
+        await getData(basepath + f'/?search={term}&page=' + page)
 
-def getRealLink(index:int):
-    video = getVideo(index)
-    soup = tools.getSoup(video.href)
+async def getRealLink(index:int):
+    video = await getVideo(index)
+    soup = await tools.getSoup(video.href)
     script = soup.find('script', { 'id': 'tm_pc_player_setup'}).text
     values = script.replace('\\', '')
     for value in values.split(','):

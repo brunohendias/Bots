@@ -1,12 +1,16 @@
 from Modules.Adult import magaz
+from pytest import mark
 
-def test_if_download_content():
+@mark.asyncio
+async def test_if_download_content():
 	magaz.cache.delOld('magaz')
-	magaz.run()
+	await magaz.run()
 	assert magaz.cache.exist()
 
-def test_if_read_cache():
-	assert magaz.getImage().name
+@mark.asyncio
+async def test_if_read_cache():
+	image = await magaz.getImage()
+	assert image.name
 
 def test_if_delete_old_cache():
 	magaz.cache.delOld('magaz')

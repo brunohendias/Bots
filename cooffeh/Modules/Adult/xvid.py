@@ -4,38 +4,36 @@ from Shared import tools
 
 basepath = 'https://www.xvideos.com'
 cache = Cache(Video, tools.cacheName('xvid'))
-def getVideo(index=1):
-    return cache.readline(index)
+async def getVideo(index=1):
+    return await cache.readline(index)
 
-def getData(link:str):
-    soup = tools.getSoup(basepath)
-    tags = soup.find_all('div', {'data-id': True})
-    for tag in tags:
+async def getData(link:str):
+    soup = await tools.getSoup(link)
+    for tag in soup.find_all('div', {'data-id': True}):
         a = tag.find('p', 'title').find('a')
-        if not a:
-            pass
-        obj = Video()
-        obj.site = 'Xvideos'
-        obj.title = a.text
-        obj.href = basepath + a.attrs['href']
-        obj.thumb = tag.find('img').attrs['data-src']
-        cache.writeline(obj)
+        if a:
+            obj = Video()
+            obj.site = 'Xvideos'
+            obj.title = a.text
+            obj.href = basepath + a.attrs['href']
+            obj.thumb = tag.find('img').attrs['data-src']
+            await cache.writeline(obj)
 
-def run():
+async def run():
     if not cache.exist():
         cache.delOld('xvid')
-        getData(basepath)
+        await getData(basepath)
         for page in ['1','2']:
-            getData(basepath + '/new/' +page)
+            await getData(basepath + '/new/' +page)
 
-def getLink(index:int):
-    video = getVideo(index)
-    soup = tools.getSoup(video.href)
+async def getLink(index:int):
+    video = await getVideo(index)
+    soup = await tools.getSoup(video.href)
     div = soup.find('div', {'id': 'html5video_base'})
     return {'link': div.find('a').attrs['href'], 'title': video.title}
 
-def search(term:str):
+async def search(term:str):
     cache.delOld('xvid')
-    getData(basepath + f'/?k={term}')
+    await getData(basepath + f'/?k={term}')
     for page in ['1','2']:
-        getData(basepath + f'/?k={term}&p=' + page)
+        await getData(basepath + f'/?k={term}&p=' + page)

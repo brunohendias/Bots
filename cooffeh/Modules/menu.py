@@ -16,19 +16,19 @@ class Commands:
 
     async def downloadInstagramImagePost(msg):
         return await tools.sendPhoto(msg, 
-            instagram.download(msg.text))
+            await instagram.download(msg.text))
     
     async def showYoutubeOptions(msg):
         return await reply.option(msg,
             option.set(msg),
-            youtube.text(msg.text))
+            await youtube.text(msg.text))
 
     async def showStream(msg):
         tools.backgroundTask(stream.run)
         return await reply.start(msg, '1_flix')
 
     async def searchGoogleImages(msg):
-        goo.run(msg.text.lower().replace('search ', ''))
+        await goo.run(msg.text.lower().replace('search ', ''))
         return await reply.start(msg, '1_goo')
 
     async def introduce(msg):
@@ -69,28 +69,28 @@ class Callbacks:
             youtube.getAudio(opt.text))
 
     async def preparStream(msg, index, com):
-        obj = adt('Modules.Stream.'+com).getVideo(index)
+        obj = await adt('Modules.Stream.'+com).getVideo(index)
         return await msg.edit_message_text(
             message.video(obj),
             reply_markup=reply.stream(index, com))
 
     async def preparVideo(msg, index, com):
-        obj = adt('Modules.Adult.'+com).getVideo(index)
+        obj = await adt('Modules.Adult.'+com).getVideo(index)
         return await msg.edit_message_text(
             message.video(obj),
             reply_markup=reply.video(index, com))
 
     async def preparImage(msg, index, com):
-        obj = adt('Modules.Adult.'+com).getImage(index)
+        obj = await adt('Modules.Adult.'+com).getImage(index)
         return await msg.edit_message_text(
             message.image(obj),
             reply_markup=reply.carousel(index, com))
 
     async def download(msg, index, com):
         com = com.replace('download', '')
-        resp = adt('Modules.Adult.'+com).getLink(index)
+        resp = await adt('Modules.Adult.'+com).getLink(index)
         return await tools.sendVideo(msg,
-            adult.download(resp['link']),
+            await adult.download(resp['link']),
             resp['title'])
 
     menu = [
@@ -113,6 +113,14 @@ class Callbacks:
 
 class Own:
 
+    async def showAdult(msg):
+        tools.backgroundTask(adult.run)
+        return await reply.start(msg, '1_xvid')
+
+    async def showMagazine(msg):
+        tools.backgroundTask(magaz.run)
+        return await reply.start(msg, '1_magaz')
+
     async def searchAdult(msg):
         term = msg.text.lower().replace(
             'xsearch ', '').replace(' ', '+')
@@ -122,14 +130,6 @@ class Own:
     async def clearContents(msg):
         tools.clear()
         return await msg.reply('Done')
-
-    async def showAdult(msg):
-        tools.backgroundTask(adult.run)
-        return await reply.start(msg, '1_xvid')
-
-    async def showMagazine(msg):
-        tools.backgroundTask(magaz.run)
-        return await reply.start(msg, '1_magaz')
 
     menu = [
         Command('adult', showAdult),

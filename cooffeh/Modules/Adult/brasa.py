@@ -5,13 +5,13 @@ from json import dumps, loads
 
 basepath = 'https://www.brasileirinhas.com.br'
 cache = Cache(Video, tools.cacheName('brasa'))
-def getVideo(index=1):
-	return cache.readline(index)
+async def getVideo(index=1):
+	return await cache.readline(index)
 
-def run():
+async def run():
 	if not cache.exist():
 		cache.delOld('brasa')
-		soup = tools.getSoup(basepath + '/home.html')
+		soup = await tools.getSoup(basepath + '/home.html')
 		for carousel in soup.find_all('div', {'id': 'carousel-itens'}):
 			for item in carousel.find_all('div', 'item'):
 				video = Video()
@@ -23,7 +23,7 @@ def run():
 					video.thumb = img.attrs['data-src']
 				except:
 					video.thumb = img.attrs['src']
-				cache.writeline(video)
+				await cache.writeline(video)
 
-def search(term:str):
-	run()
+async def search(term:str):
+	await run()
