@@ -21,9 +21,9 @@ jobs:
         run: |
           echo "${{ secrets.ENV_FILE_WHISKYH }}" > whiskyh/.env
           echo "${{ secrets.ENV_FILE_COOFFEH }}" > cooffeh/.env
+          rm -rf git* .git*
           cd cooffeh
-          rm -rf Tests git* .git* \
-              devreqs.txt .env.example \
+          rm -rf Tests devreqs.txt .env.example \
               Dockerfile docker-compose.yml \
               /tmp/*.tar.gz
           cd ..
