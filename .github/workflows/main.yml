@@ -19,8 +19,8 @@ jobs:
         env:
           GITHUB_SHA: ${{ github.sha }}
         run: |
-          echo "${{ secrets.ENV_FILE_COOFFEH }}" > whiskyh/.env
-          echo "${{ secrets.ENV_FILE_WHISKYH }}" > cooffeh/.env
+          echo "${{ secrets.ENV_FILE_WHISKYH }}" > whiskyh/.env
+          echo "${{ secrets.ENV_FILE_COOFFEH }}" > cooffeh/.env
           cd cooffeh
           rm -rf Tests git* .git* \
               devreqs.txt .env.example \
