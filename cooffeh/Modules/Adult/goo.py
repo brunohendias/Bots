@@ -14,7 +14,6 @@ async def run(term:str,reqs=4):
     cx = getenv('GOOGLE_API_CX')
     key = getenv('GOOGLE_API_KEY')
     baseurl = 'https://customsearch.googleapis.com/customsearch/v1?cx='+cx
-    term = term.replace(' ', '+')
     start = 0
     for req in range(reqs):
         link = f'{baseurl}&key={key}&searchType=image&q={term}&start={start}'

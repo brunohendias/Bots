@@ -4,10 +4,10 @@ from Shared import tools
 
 basepath = 'https://www.xvideos.com'
 cache = Cache(Video, tools.cacheName('xvid'))
-async def getVideo(index=1):
+async def getVideo(index:int=1):
     return await cache.readline(index)
 
-async def getData(link:str):
+async def scrap(link:str):
     soup = await tools.getSoup(link)
     for tag in soup.find_all('div', {'data-id': True}):
         a = tag.find('p', 'title').find('a')
@@ -22,9 +22,9 @@ async def getData(link:str):
 async def run():
     if not cache.exist():
         cache.delOld('xvid')
-        await getData(basepath)
+        await scrap(basepath)
         for page in ['1','2']:
-            await getData(basepath + '/new/' +page)
+            await scrap(basepath + '/new/' +page)
 
 async def getLink(index:int):
     video = await getVideo(index)
@@ -34,6 +34,6 @@ async def getLink(index:int):
 
 async def search(term:str):
     cache.delOld('xvid')
-    await getData(basepath + f'/?k={term}')
+    await scrap(basepath + f'/?k={term}')
     for page in ['1','2']:
-        await getData(basepath + f'/?k={term}&p=' + page)
+        await scrap(basepath + f'/?k={term}&p=' + page)

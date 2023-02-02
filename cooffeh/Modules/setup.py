@@ -1,6 +1,9 @@
-from os import getenv
+from os import getenv, path, mkdir
 from dotenv import load_dotenv
 from pyrogram import Client
+
+if not path.exists('Contents'):
+    mkdir('Contents')
 
 load_dotenv()
 admin = int(getenv('TELEGRAM_ADMIN_ID'))

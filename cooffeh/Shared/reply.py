@@ -1,30 +1,25 @@
 from pyrogram.types import InlineKeyboardButton as KB, InlineKeyboardMarkup as KM
 
-def carousel(index, name):
-    return KM([
-        [ KB('<',f"{index-1}_{name}"),
-            KB('>',f"{index+1}_{name}")]
+def carousel(index, name, others=[]):
+    return KM([[ 
+        KB('<',f"{index-1}_{name}"),
+        KB('>',f"{index+1}_{name}")],
+        others
     ])
 
-def video(index, name):
-    return KM([
-        [ KB('<',f"{index-1}_{name}"),
-            KB('>',f"{index+1}_{name}")],
-        [ KB('Download',f"{index}_download{name}"),
-            KB('Other site', '1_sites')],
-    ])
+def image(index, name):
+    return carousel(index, name, [KB('Other site', '1_magazines')])
 
 def stream(index, name):
-    return KM([
-        [ KB('<',f"{index-1}_{name}"),
-            KB('>',f"{index+1}_{name}")],
-        [ KB('Download',f"{index}_download{name}"),
-            KB('Other site', '1_streams')],
-    ])
+    return carousel(index, name, [KB('Other site', '1_streams')])
+
+def video(index, name):
+    return carousel(index, name, [
+        KB('Download',f"{index}_download{name}"),
+        KB('Other site', '1_sites')])
 
 def sites():
-    return KM([
-        [ 
+    return KM([[ 
             KB('XVideos', '1_xvid'),
             KB('RedTube', '1_red')
         ],[ 
@@ -34,10 +29,16 @@ def sites():
     ])
 
 def streams():
-    return KM([
-        [ 
+    return KM([[ 
             KB('Netflix', '1_flix'),
             KB('PrimeVideo', '1_prime')
+        ]
+    ])
+
+def magazines():
+    return KM([[ 
+            KB('Erome', '1_erome'),
+            KB('Playboy', '1_play')
         ]
     ])
 
