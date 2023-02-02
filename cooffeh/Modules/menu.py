@@ -28,7 +28,7 @@ class Commands:
         return await reply.start(msg, '1_flix')
 
     async def searchGoogleImages(msg):
-        await goo.run(msg.text.lower().replace('search ', ''))
+        await goo.run(tools.traitTerm(msg.text, 'search '))
         return await reply.start(msg, '1_goo')
 
     async def introduce(msg):
@@ -57,6 +57,11 @@ class Callbacks:
             'Choose One Site',
             reply_markup=reply.streams())
 
+    async def showMagazines(msg, index, com):
+        return await msg.edit_message_text(
+            'Choose One Site',
+            reply_markup=reply.magazines())
+
     async def downloadYoutubeVideo(msg, index, com):
         opt = option.get(index)
         return await tools.sendVideo(msg,
@@ -84,7 +89,7 @@ class Callbacks:
         obj = await adt('Modules.Adult.'+com).getImage(index)
         return await msg.edit_message_text(
             message.image(obj),
-            reply_markup=reply.carousel(index, com))
+            reply_markup=reply.image(index, com))
 
     async def download(msg, index, com):
         com = com.replace('download', '')
@@ -96,14 +101,16 @@ class Callbacks:
     menu = [
         Command('sites', showSites),
         Command('streams', showStreams),
+        Command('magazines', showMagazines),
         Command('video', downloadYoutubeVideo),
         Command('audio', downloadYoutubeAudio),
         Command('xvid', preparVideo),
         Command('hub', preparVideo),
         Command('red', preparVideo),
         Command('brasa', preparVideo),
-        Command('magaz', preparImage),
+        Command('erome', preparImage),
         Command('goo', preparImage),
+        Command('play', preparImage),
         Command('flix', preparStream),
         Command('prime', preparStream),
         Command('downloadxvid', download),
@@ -119,13 +126,17 @@ class Own:
 
     async def showMagazine(msg):
         tools.backgroundTask(magaz.run)
-        return await reply.start(msg, '1_magaz')
+        return await reply.start(msg, '1_erome')
 
     async def searchAdult(msg):
-        term = msg.text.lower().replace(
-            'xsearch ', '').replace(' ', '+')
-        tools.backgroundTask(adult.search, [term])
+        tools.backgroundTask(adult.search, 
+            [tools.traitTerm(msg.text, 'xsearch ')])
         return await reply.start(msg, '1_xvid')
+
+    async def searchMagazine(msg):
+        tools.backgroundTask(magaz.search, 
+            [tools.traitTerm(msg.text, 'msearch ')])
+        return await reply.start(msg, '1_erome')
 
     async def clearContents(msg):
         tools.clear()
@@ -135,5 +146,6 @@ class Own:
         Command('adult', showAdult),
         Command('magazine', showMagazine),
         Command('xsearch', searchAdult),
+        Command('msearch', searchMagazine),
         Command('cleard', clearContents)
     ]

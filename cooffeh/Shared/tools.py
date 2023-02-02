@@ -14,7 +14,7 @@ def getCommand(data):
 def fileName():
     return ''.join(choices('abcdefghijklm', k=3))
 
-def cacheName(name):
+def cacheName(name: str):
     now = dt.now()
     return f"{now.day}{'AM' if now.hour < 12 else 'PM'}{name}.txt"
 
@@ -24,17 +24,21 @@ def megaBytesToBytes(mb: int):
 def clear():
     system('rm -rf ./Contents/*')
 
+def traitTerm(text: str, com: str):
+    return text.lower().replace(
+        com, '').replace(' ', '+')
+
 def backgroundTask(action, args=[]):
     Thread(target=action, args=args).start()
     return sleep(0.5)
 
-async def getSoup(link):
+async def getSoup(link: str):
     if not link:
         return ''
     html = get(link).text
     return bs(html, 'html.parser')
 
-async def saveContent(link, extension):
+async def saveContent(link: str, extension: str):
     if not link:
         return ''
     content = get(link).content
@@ -51,7 +55,7 @@ async def progress(current, total, msg):
         msg.id, 
         f"{current * 100 / total:.1f}%")
 
-async def sendPhoto(msg, file_):
+async def sendPhoto(msg, file_: str):
     if not file_:
         return await msg.reply('Not Found!')
     await msg.reply('Finished with success! Sending...')
@@ -69,7 +73,7 @@ async def sendAudio(msg, audio):
         return system(f'rm -rf {audio.file_}')
     return await app.send_message(chat, 'Not Found!')
 
-async def sendVideo(msg, file_, caption):
+async def sendVideo(msg, file_: str, caption: str):
     chat = msg.from_user.id
     if not file_:
         return await app.send_message(chat, 'Not Found!')

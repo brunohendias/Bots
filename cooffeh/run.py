@@ -29,6 +29,8 @@ async def main(cliente, msg):
             lower = 'qrcode'
         elif 'xsearch' in lower.split(' ')[0]:
             lower = 'xsearch'
+        elif 'msearch' in lower.split(' ')[0]:
+            lower = 'msearch'
         elif 'search' in lower.split(' ')[0]:
             lower = 'search'
 
@@ -46,4 +48,5 @@ async def main(cliente, msg):
     except Exception as err:
         return await app.send_message(admin,
             message.logerr(usr.id, usr.first_name, err, msg.text))
+
 app.run()
