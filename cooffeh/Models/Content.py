@@ -1,9 +1,9 @@
-class Video:
+class Content:
     site = ''
     title = ''
     href = ''
     link = ''
-    thumb = ''
+    img = ''
 
     def __repr__(self):
         return self.site

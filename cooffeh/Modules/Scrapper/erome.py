@@ -1,28 +1,26 @@
 from Modules.cache import Cache
-from Models.Image import Image
+from Models.Content import Content
 from Shared import tools
 
-cache = Cache(Image, tools.cacheName('erome'))
-async def getImage(index:int=1):
-    return await cache.readline(index)
-
+cache = Cache()
 async def openAlbum(album):
     href = album.find('a', 'album-link').attrs['href']
     soup = await tools.getSoup(href)
-    name = soup.find('title').text
+    title = soup.find('title').text
     for img in soup.find_all('img', 'img-front'):
-        obj = Image()
+        obj = Content()
         obj.site = 'erome.com'
-        obj.name = name
+        obj.title = title
         obj.img = img.attrs['data-src']
-        await cache.writeline(obj)
+        obj.href = href
+        cache.add(obj)
     for video in soup.find_all('video', { 'poster': True }):
-        obj = Image()
+        obj = Content()
         obj.site = 'erome.com'
-        obj.name = name
+        obj.title = title
         obj.img = video.attrs['poster']
-        obj.page = video.find('source').attrs['src']
-        await cache.writeline(obj)
+        obj.link = video.find('source').attrs['src']
+        cache.add(obj)
 
 async def scrap(link:str):
     soup = await tools.getSoup(link)
@@ -30,10 +28,9 @@ async def scrap(link:str):
         await openAlbum(album)
 
 async def run():
-    if not cache.exist():
-        cache.delOld('erome')
-        await scrap('https://www.erome.com/explore/new')
+    cache.clear()
+    await scrap('https://www.erome.com/explore/new')
 
 async def search(term: str):
-    cache.delOld('erome')
+    cache.clear()
     await scrap(f'https://www.erome.com/search?q={term}')

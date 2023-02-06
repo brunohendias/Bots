@@ -1,5 +1,5 @@
 from Modules import qrcode, youtube, instagram, adult, stream, option
-from Modules.Adult import magaz, goo
+from Modules.Scrapper import goo
 from importlib import import_module as adt
 from Models.Command import Command
 from Shared import message, tools, reply
@@ -25,11 +25,11 @@ class Commands:
 
     async def showStream(msg):
         tools.backgroundTask(stream.run)
-        return await reply.start(msg, '1_flix')
+        return await reply.start(msg, '0_flix')
 
     async def searchGoogleImages(msg):
         await goo.run(tools.traitTerm(msg.text, 'search '))
-        return await reply.start(msg, '1_goo')
+        return await reply.start(msg, '0_goo')
 
     async def introduce(msg):
         return await msg.reply(message.introduce)
@@ -47,105 +47,45 @@ class Commands:
 
 class Callbacks:
 
-    async def showSites(msg, index, com):
+    async def sites(self, msg, com:str):
         return await msg.edit_message_text(
             'Choose One Site',
-            reply_markup=reply.sites())
+        reply_markup=reply.sites(com))
 
-    async def showStreams(msg, index, com):
-        return await msg.edit_message_text(
-            'Choose One Site',
-            reply_markup=reply.streams())
-
-    async def showMagazines(msg, index, com):
-        return await msg.edit_message_text(
-            'Choose One Site',
-            reply_markup=reply.magazines())
-
-    async def downloadYoutubeVideo(msg, index, com):
+    async def downloadYoutubeVideo(msg, index:int, com:str):
         opt = option.get(index)
         return await tools.sendVideo(msg,
             youtube.getVideo(opt.text),
             'Youtube Video')
     
-    async def downloadYoutubeAudio(msg, index, com):
+    async def downloadYoutubeAudio(msg, index:int, com:str):
         opt = option.get(index)
         return await tools.sendAudio(msg,
             youtube.getAudio(opt.text))
 
-    async def preparStream(msg, index, com):
-        obj = await adt('Modules.Stream.'+com).getVideo(index)
+    async def navigate(self, msg, index:int, com:str):
+        obj = adt(f'Modules.Scrapper.{com}').cache.read(index)
         return await msg.edit_message_text(
-            message.video(obj),
-            reply_markup=reply.stream(index, com))
-
-    async def preparVideo(msg, index, com):
-        obj = await adt('Modules.Adult.'+com).getVideo(index)
-        return await msg.edit_message_text(
-            message.video(obj),
-            reply_markup=reply.video(index, com))
-
-    async def preparImage(msg, index, com):
-        obj = await adt('Modules.Adult.'+com).getImage(index)
-        return await msg.edit_message_text(
-            message.image(obj),
-            reply_markup=reply.image(index, com))
-
-    async def download(msg, index, com):
-        com = com.replace('download', '')
-        resp = await adt('Modules.Adult.'+com).getLink(index)
-        return await tools.sendVideo(msg,
-            await adult.download(resp['link']),
-            resp['title'])
+            message.content(obj),
+            reply_markup=reply.navigate(index, com))
 
     menu = [
-        Command('sites', showSites),
-        Command('streams', showStreams),
-        Command('magazines', showMagazines),
         Command('video', downloadYoutubeVideo),
-        Command('audio', downloadYoutubeAudio),
-        Command('xvid', preparVideo),
-        Command('hub', preparVideo),
-        Command('red', preparVideo),
-        Command('brasa', preparVideo),
-        Command('erome', preparImage),
-        Command('goo', preparImage),
-        Command('play', preparImage),
-        Command('flix', preparStream),
-        Command('prime', preparStream),
-        Command('downloadxvid', download),
-        Command('downloadred', download),
-        Command('downloadhub', download)
+        Command('audio', downloadYoutubeAudio)
     ]
 
 class Own:
 
     async def showAdult(msg):
         tools.backgroundTask(adult.run)
-        return await reply.start(msg, '1_xvid')
-
-    async def showMagazine(msg):
-        tools.backgroundTask(magaz.run)
-        return await reply.start(msg, '1_erome')
+        return await reply.start(msg, '0_xvid')
 
     async def searchAdult(msg):
         tools.backgroundTask(adult.search, 
             [tools.traitTerm(msg.text, 'xsearch ')])
-        return await reply.start(msg, '1_xvid')
-
-    async def searchMagazine(msg):
-        tools.backgroundTask(magaz.search, 
-            [tools.traitTerm(msg.text, 'msearch ')])
-        return await reply.start(msg, '1_erome')
-
-    async def clearContents(msg):
-        tools.clear()
-        return await msg.reply('Done')
+        return await reply.start(msg, '0_xvid')
 
     menu = [
         Command('adult', showAdult),
-        Command('magazine', showMagazine),
-        Command('xsearch', searchAdult),
-        Command('msearch', searchMagazine),
-        Command('cleard', clearContents)
+        Command('xsearch', searchAdult)
     ]

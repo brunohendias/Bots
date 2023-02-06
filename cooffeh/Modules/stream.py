@@ -1,4 +1,4 @@
-from Modules.Stream import prime, flix
+from Modules.Scrapper import prime, flix
 import asyncio
 
 async def runAsync():
