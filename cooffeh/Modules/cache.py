@@ -1,29 +1,14 @@
-from json import dumps, loads
-from os import popen, path, system
-from linecache import getline, clearcache
-
 class Cache:
-    title = 'Cache'
-
-    def __init__(self, obj, file_='cache.txt'):
-        self.obj = obj
-        self.path = './Contents/' + file_
+    contents = []
 
     def __repr__(self):
-        return self.title
+        return 'Cache'
 
-    def exist(self):
-        return path.exists(self.path)
+    def read(self, index:int=0):
+        return self.contents[index]
 
-    def delOld(self, name):
-        system(f'rm -rf ./Contents/*{name}.txt')
-        return clearcache()
+    def add(self, obj):
+        self.contents.append(obj)
 
-    async def readline(self, index=1):
-        load = self.obj()
-        load.__dict__ = loads(getline(self.path, index) or '{}')
-        return load
-
-    async def writeline(self, obj):
-        with open(self.path, 'at+') as f:
-            f.write(dumps(obj.__dict__) + '\n')
+    def clear(self):
+        self.contents = []

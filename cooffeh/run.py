@@ -5,11 +5,15 @@ from Shared import tools, message
 @app.on_callback_query()
 async def callback(client, msg):
     usr = msg.from_user
+    actions = Callbacks()
     try:
         call = tools.getCommand(msg.data)
-        for c in Callbacks().menu:
+        for c in actions.menu:
             if call[1] == c.command:
                 return await c.action(msg, int(call[0]), call[1])
+        if 'sites' in call[1]:
+            return await actions.sites(msg, call[1])
+        return await actions.navigate(msg, int(call[0]), call[1])
     except Exception as err:
         return await app.send_message(admin,
             message.logerr(usr.id, usr.first_name, err, msg.data))
